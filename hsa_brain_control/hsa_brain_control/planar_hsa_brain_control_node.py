@@ -44,11 +44,8 @@ class PlanarHsaBrainControlNode(Node):
         # calculate control input
         self.phi = self.phi + self.phi_delta * brain_signal * np.array([-1.0, 1.0])
 
-        self.get_logger().info("Control input: %s" % self.phi)
-
         # publish control input
         phi_msg = Float64MultiArray(data=self.phi.tolist())
-        self.get_logger().info(f"Publishing {phi_msg}")
         self.control_input_pub.publish(phi_msg)
 
 
