@@ -11,7 +11,8 @@ def main():
     node = rclpy.create_node("socket_reader_node")
     publisher = node.create_publisher(String, "socket_data", 10)
 
-    host = "localhost"
+    node.declare_parameter("host", "localhost")
+    host = node.get_parameter("host").value
     node.declare_parameter("port", 5678)
     port = node.get_parameter("port").value
 
