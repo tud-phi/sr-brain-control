@@ -3,6 +3,7 @@
 // which is again based on http://www.linuxhowtos.org/C_C++/socket.htm
 
 #include "rclcpp/rclcpp.hpp"
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -60,8 +61,12 @@ int main(int argc, char *argv[]) {
   serv_addr.sin_port = htons(portno);
 
   // Connect to socket
-  if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
-      error("ERROR connecting");
+  if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) {
+    error("ERROR connecting");
+  } else {
+    std::cout << "Successfully connected to socket!";
+  }
+      
 
   std_msgs::msg::String message;
   std::stringstream ss;
@@ -69,7 +74,7 @@ int main(int argc, char *argv[]) {
   while(rclcpp::ok()) {
         ss.str(std::string()); // Clear contents of string stream
         bzero(buffer, 256);
-        n = read(sockfd,buffer, 255); // Read msg from buffer
+        n = read(sockfd, buffer, 255); // Read msg from buffer
         if (n < 0) 
             error("ERROR reading from socket");
 
@@ -83,5 +88,5 @@ int main(int argc, char *argv[]) {
   }
 
   close(sockfd);
-	return 0;
+  return 0;
 }
