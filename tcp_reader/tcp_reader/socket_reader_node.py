@@ -28,12 +28,14 @@ def main():
             if not data:
                 break
 
+            node.get_logger().info(f"Received: {data}")
+
             # Create an instance of your custom message
             # Assign received data to the message field
             msg = String(data=data)
 
             publisher.publish(msg)
-            node.get_logger().info(f"Published: {data}")
+            node.get_logger().info(f"Published: {msg}")
 
         node.destroy_node()
         rclpy.shutdown()
