@@ -38,6 +38,7 @@ class PlanarHsaBrainControlNode(Node):
         )
 
     def brain_signal_callback(self, msg: Int32):
+        # brain signal will be Int32 with values {-1, 0, 1}
         brain_signal = msg.data
         self.get_logger().info("Received brain signal: %d" % brain_signal)
 
