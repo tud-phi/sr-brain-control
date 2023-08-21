@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>tcp_reader</name>
+  <name>openvibe_bridge</name>
   <version>0.0.0</version>
-  <description>Read data from a TCP socket and publish it as ROS2 messages.</description>
+  <description>Receive data from OpenViBE sent over a TCP socket and publish it as ROS2 messages.</description>
   <maintainer email="maximilian@stoelzle.ch">Maximilian Stölzle</maintainer>
   <license>MIT</license>
 

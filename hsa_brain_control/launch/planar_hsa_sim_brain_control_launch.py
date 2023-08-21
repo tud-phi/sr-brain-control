@@ -37,6 +37,12 @@ def generate_launch_description():
                 ),
             ],
         ),
+        Node(
+            package="openvibe_bridge",
+            executable="stimulation_receiver_node",
+            name="brain_signal_publisher",
+            parameters=[{}],
+        ),
     ]
 
     if RECORD_BAG:

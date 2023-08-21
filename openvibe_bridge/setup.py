@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = "tcp_reader"
+package_name = "openvibe_bridge"
 
 setup(
     name=package_name,
@@ -14,10 +14,12 @@ setup(
     zip_safe=True,
     maintainer="Maximilian Stölzle",
     maintainer_email="maximilian@stoelzle.ch",
-    description="Read data from a TCP socket and publish it as ROS2 messages.",
+    description="Receive data from OpenViBE sent over a TCP socket and publish it as ROS2 messages.",
     license="MIT",
     tests_require=["pytest"],
     entry_points={
-        "console_scripts": ["socket_reader_node = tcp_reader.socket_reader_node:main"],
+        "console_scripts": [
+            "stimulation_receiver_node = openvibe_bridge.stimulation_receiver_node:main"
+        ],
     },
 )
