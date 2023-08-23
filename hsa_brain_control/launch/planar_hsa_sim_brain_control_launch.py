@@ -41,7 +41,10 @@ def generate_launch_description():
             package="openvibe_bridge",
             executable="stimulation_receiver_node",
             name="brain_signal_publisher",
-            parameters=[{}],
+            parameters=[{
+                "host": "145.94.218.4"
+            }],
+            arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
     ]
 

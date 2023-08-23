@@ -27,20 +27,20 @@ def main():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((host, port))
 
-        print(f"Listening on {host}:{port}")
+        node.get_logger().info(f"Listening on {host}:{port}")
 
         while rclpy.ok():
             tcp_data = s.recv(8)
             if not tcp_data:
                 break
 
-            node.get_logger().info(f"Received raw tcp data: {tcp_data}")
+            # node.get_logger().info(f"Received raw tcp data: {tcp_data}")
 
             # Decode the received data
             stimulation_type = decode_stimulation(tcp_data)
-            node.get_logger().info(
-                f"Decoded msg to stimulation type: {stimulation_type}"
-            )
+            # node.get_logger().info(
+            #     f"Decoded msg to stimulation type: {stimulation_type}"
+            # )
 
             brain_signal = 0
             # map the stimulation type to the brain signal {-1, 0, 1}
@@ -61,7 +61,7 @@ def main():
             msg = Int32(data=brain_signal)
 
             publisher.publish(msg)
-            node.get_logger().info(f"Published msg: {msg}")
+            # node.get_logger().info(f"Published msg: {msg}")
 
         node.destroy_node()
         rclpy.shutdown()
