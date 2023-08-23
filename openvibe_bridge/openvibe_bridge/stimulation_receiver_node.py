@@ -44,7 +44,10 @@ def main():
 
             brain_signal = 0
             # map the stimulation type to the brain signal {-1, 0, 1}
-            if stimulation_type == 1:
+            if stimulation_type == 0:
+                # no stimulation / effect
+                brain_signal = 0
+            elif stimulation_type == 1:
                 # bending to the left
                 brain_signal = 1
             elif stimulation_type == 2:
