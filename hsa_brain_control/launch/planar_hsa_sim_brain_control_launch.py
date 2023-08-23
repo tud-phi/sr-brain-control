@@ -3,6 +3,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess, TimerAction
 from launch_ros.actions import Node
+import numpy as np
 import os
 
 RECORD_BAG = False  # Record data to rosbag file
@@ -34,6 +35,9 @@ def generate_launch_description():
                     package="hsa_brain_control",
                     executable="planar_hsa_brain_control_node",
                     name="brain_control",
+                    parameters=[{
+                        "phi_delta": np.pi / 100,
+                    }]
                 ),
             ],
         ),
