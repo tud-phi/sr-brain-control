@@ -13,8 +13,8 @@ def decode_stimulation(byte_data):
     return stimulation_type
 
 
-def main():
-    rclpy.init()
+def main(args=None):
+    rclpy.init(args=args)
 
     node = rclpy.create_node("stimulation_receiver_node")
     publisher = node.create_publisher(Int32, "brain_signal", 10)
@@ -54,7 +54,8 @@ def main():
                 # bending to the right
                 brain_signal = -1
             else:
-                raise ValueError(f"Unknown stimulation type {stimulation_type}")
+                node.get_logger().error(f"Unknown stimulation type: {stimulation_type}")
+                continue
 
             # Create an instance of your custom message
             # Assign received data to the message field
