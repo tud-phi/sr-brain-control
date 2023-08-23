@@ -18,6 +18,10 @@ class PlanarHsaBrainControlNode(Node):
         self.declare_parameter("phi_delta", np.pi / 25)
         self.phi_delta = self.get_parameter("phi_delta").value
 
+        # maximum magnitude of control input [rad]
+        self.declare_parameter("phi_max", np.pi)
+        self.phi_max = self.get_parameter("phi_max").value
+
         # publisher of control input
         self.declare_parameter("control_input_topic", "control_input")
         self.control_input_pub = self.create_publisher(
@@ -44,6 +48,9 @@ class PlanarHsaBrainControlNode(Node):
 
         # calculate control input
         self.phi = self.phi + self.phi_delta * brain_signal * np.array([-1.0, 1.0])
+
+        # saturate control input to [0.0, phi_max]
+        self.phi = np.clip(self.phi, np.zeros_like(self.phi), self.phi_max * np.ones_like(self.phi))
 
         # publish control input
         phi_msg = Float64MultiArray(data=self.phi.tolist())
