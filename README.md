@@ -7,7 +7,7 @@ Brain-control of soft robots
 ### Launch ROS2 nodes
 
 ```bash
-ros2 launch ./hsa_brain_control/launch/planar_hsa_sim_brain_control_launch.py
+ros2 launch ./launch/planar_hsa_sim_brain_control_launch.py
 ```
 
 ### Manually send brain signals

@@ -35,9 +35,11 @@ def generate_launch_description():
                     package="hsa_brain_control",
                     executable="planar_hsa_brain_control_node",
                     name="brain_control",
-                    parameters=[{
-                        "phi_delta": np.pi / 100,
-                    }],
+                    parameters=[
+                        {
+                            "phi_delta": np.pi / 100,
+                        }
+                    ],
                     arguments=["--ros-args", "--log-level", LOG_LEVEL],
                 ),
             ],
@@ -46,9 +48,18 @@ def generate_launch_description():
             package="openvibe_bridge",
             executable="stimulation_receiver_node",
             name="brain_signal_publisher",
-            parameters=[{
-                "host": "145.94.218.4"
-            }],
+            parameters=[{"host": "145.94.218.4"}],
+            arguments=["--ros-args", "--log-level", LOG_LEVEL],
+        ),
+        Node(
+            package="hsa_trajectory_planner",
+            executable="planar_bending_trajectory_node",
+            name="trajectory_planner",
+            parameters=[
+                {
+                    "kappa_b_des": 10,
+                }
+            ],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
     ]

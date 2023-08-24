@@ -50,7 +50,9 @@ class PlanarHsaBrainControlNode(Node):
         self.phi = self.phi + self.phi_delta * brain_signal * np.array([-1.0, 1.0])
 
         # saturate control input to [0.0, phi_max]
-        self.phi = np.clip(self.phi, np.zeros_like(self.phi), self.phi_max * np.ones_like(self.phi))
+        self.phi = np.clip(
+            self.phi, np.zeros_like(self.phi), self.phi_max * np.ones_like(self.phi)
+        )
 
         # publish control input
         phi_msg = Float64MultiArray(data=self.phi.tolist())
