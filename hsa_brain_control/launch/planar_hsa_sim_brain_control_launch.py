@@ -37,7 +37,8 @@ def generate_launch_description():
                     name="brain_control",
                     parameters=[{
                         "phi_delta": np.pi / 100,
-                    }]
+                    }],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
                 ),
             ],
         ),
