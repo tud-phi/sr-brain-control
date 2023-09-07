@@ -37,7 +37,7 @@ def generate_launch_description():
                     name="brain_control",
                     parameters=[
                         {
-                            "phi_delta": np.pi / 100,
+                            "phi_delta": np.pi / 200,
                         }
                     ],
                     arguments=["--ros-args", "--log-level", LOG_LEVEL],
@@ -48,7 +48,7 @@ def generate_launch_description():
             package="openvibe_bridge",
             executable="stimulation_receiver_node",
             name="brain_signal_publisher",
-            parameters=[{"host": "145.94.218.4"}],
+            parameters=[{"host": "145.94.196.114"}],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
         Node(
