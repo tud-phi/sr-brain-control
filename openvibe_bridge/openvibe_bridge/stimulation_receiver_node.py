@@ -44,7 +44,7 @@ def main(args=None):
 
             brain_signal = 0
             # map the stimulation type to the brain signal {-1, 0, 1}
-            if stimulation_type == 0:
+            if stimulation_type == 16:
                 # no stimulation / effect
                 brain_signal = 0
             elif stimulation_type == 1:
