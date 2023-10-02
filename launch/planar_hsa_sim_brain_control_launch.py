@@ -10,6 +10,29 @@ RECORD_BAG = False  # Record data to rosbag file
 BAG_PATH = "/home/mstoelzle/phd/rosbags"
 LOG_LEVEL = "warn"
 
+hsa_material = "fpu"
+kappa_b_eq = 0.0
+sigma_sh_eq = 0.0
+sigma_a_eq = 1.0
+
+if hsa_material == "fpu":
+    phi_max = 200 / 180 * np.pi
+elif hsa_material == "epu":
+    phi_max = 270 / 180 * np.pi
+else:
+    raise ValueError(f"Unknown HSA material: {hsa_material}")
+
+common_params = {
+    "hsa_material": hsa_material,
+    "kappa_b_eq": kappa_b_eq,
+    "sigma_sh_eq": sigma_sh_eq,
+    "sigma_a_eq": sigma_a_eq,
+    "phi_max": phi_max,
+}
+viz_params = common_params | {
+    "rendering_frequency": 20.0,
+}
+
 
 def generate_launch_description():
     launch_actions = [
@@ -17,29 +40,22 @@ def generate_launch_description():
             package="hsa_sim",
             executable="planar_sim_node",
             name="simulation",
+            parameters=[common_params],
         ),
         Node(
             package="hsa_visualization",
             executable="planar_viz_node",
             name="visualization",
-            parameters=[
-                {
-                    "rendering_frequency": 20.0,
-                }
-            ],
+            parameters=[viz_params],
         ),
         TimerAction(
-            period=25.0,  # delay start of control node for simulation to be fully compiled and ready
+            period=30.0,  # delay start of control node for simulation to be fully compiled and ready
             actions=[
                 Node(
                     package="hsa_brain_control",
                     executable="planar_hsa_brain_control_node",
                     name="brain_control",
-                    parameters=[
-                        {
-                            "phi_delta": np.pi / 200,
-                        }
-                    ],
+                    parameters=[common_params],
                     arguments=["--ros-args", "--log-level", LOG_LEVEL],
                 ),
             ],
@@ -55,11 +71,7 @@ def generate_launch_description():
             package="hsa_trajectory_planner",
             executable="planar_bending_trajectory_node",
             name="trajectory_planner",
-            parameters=[
-                {
-                    "kappa_b_des": 10,
-                }
-            ],
+            parameters=[common_params],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
     ]

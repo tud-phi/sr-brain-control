@@ -13,7 +13,7 @@ from hsa_control_interfaces.msg import PlanarSetpoint
 from mocap_optitrack_interfaces.msg import PlanarCsConfiguration
 
 import jsrm
-from jsrm.parameters.hsa_params import PARAMS_CONTROL
+from jsrm.parameters.hsa_params import PARAMS_FPU_CONTROL, PARAMS_EPU_CONTROL
 from jsrm.systems import planar_hsa
 
 
@@ -44,14 +44,33 @@ class PlanarBendingTrajectoryNode(Node):
             sys_helpers,
         ) = planar_hsa.factory(sym_exp_filepath)
 
-        self.params = PARAMS_CONTROL.copy()
+        self.declare_parameter("hsa_material", "fpu")
+        hsa_material = self.get_parameter("hsa_material").value
+        if hsa_material == "fpu":
+            self.params = PARAMS_FPU_CONTROL.copy()
+        elif hsa_material == "epu":
+            self.params = PARAMS_EPU_CONTROL.copy()
+        else:
+            raise ValueError(f"Unknown HSA material: {hsa_material}")
 
-        # parameter for specifying a different axial rest strain
+        # parameters for specifying different rest strains
+        self.declare_parameter("kappa_b_eq", self.params["kappa_b_eq"].mean().item())
+        self.declare_parameter("sigma_sh_eq", self.params["sigma_sh_eq"].mean().item())
         self.declare_parameter("sigma_a_eq", self.params["sigma_a_eq"].mean().item())
+        kappa_b_eq = self.get_parameter("kappa_b_eq").value
+        sigma_sh_eq = self.get_parameter("sigma_sh_eq").value
         sigma_a_eq = self.get_parameter("sigma_a_eq").value
+        self.params["kappa_b_eq"] = kappa_b_eq * jnp.ones_like(
+            self.params["kappa_b_eq"]
+        )
+        self.params["sigma_sh_eq"] = sigma_sh_eq * jnp.ones_like(
+            self.params["sigma_sh_eq"]
+        )
         self.params["sigma_a_eq"] = sigma_a_eq * jnp.ones_like(
             self.params["sigma_a_eq"]
         )
+        # actual rest strain
+        self.xi_eq = sys_helpers["rest_strains_fn"](self.params)  # rest strains
 
         # set the desired axial strain [-]
         self.declare_parameter("sigma_a_des", 0.2876)
