@@ -6,7 +6,7 @@ from launch_ros.actions import Node
 import numpy as np
 import os
 
-RECORD_BAG = False  # Record data to rosbag file
+RECORD_BAG = True  # Record data to rosbag file
 BAG_PATH = "/home/mstoelzle/phd/rosbags"
 LOG_LEVEL = "warn"
 
