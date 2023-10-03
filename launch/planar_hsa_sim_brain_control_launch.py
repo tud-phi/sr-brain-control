@@ -7,7 +7,7 @@ import numpy as np
 import os
 
 RECORD_BAG = True  # Record data to rosbag file
-BAG_PATH = "/home/mstoelzle/phd/rosbags"
+BAG_PATH = "/home/mstoelzle/phd/rosbags/rosbag2_{now.strftime('%Y%m%d_%H%M%S')}"
 LOG_LEVEL = "warn"
 
 hsa_material = "fpu"
@@ -64,7 +64,7 @@ def generate_launch_description():
             package="openvibe_bridge",
             executable="stimulation_receiver_node",
             name="brain_signal_publisher",
-            parameters=[{"host": "145.94.196.114"}],
+            parameters=[{"host": "145.94.243.168"}],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
         Node(
