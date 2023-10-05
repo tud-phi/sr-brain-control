@@ -10,7 +10,7 @@ import os
 # datetime object containing current date and time
 now = datetime.now()
 
-RECORD_BAG = True  # Record data to rosbag file
+RECORD = True  # Record data to rosbag file
 BAG_PATH = f"/home/mstoelzle/phd/rosbags/rosbag2_{now.strftime('%Y%m%d_%H%M%S')}"
 LOG_LEVEL = "warn"
 
@@ -89,7 +89,7 @@ def generate_launch_description():
         ),
     ]
 
-    if RECORD_BAG:
+    if RECORD:
         launch_actions.append(
             ExecuteProcess(
                 cmd=["ros2", "bag", "record", "-a", "-o", BAG_PATH], output="screen"

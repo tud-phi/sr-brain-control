@@ -10,7 +10,7 @@ import os
 # datetime object containing current date and time
 now = datetime.now()
 
-RECORD_BAG = True  # Record data to rosbag file
+RECORD = True  # Record data to rosbag file
 BAG_PATH = f"/home/mstoelzle/phd/rosbags/rosbag2_{now.strftime('%Y%m%d_%H%M%S')}"
 LOG_LEVEL = "warn"
 
@@ -44,7 +44,41 @@ viz_params = common_params | {
 
 
 def generate_launch_description():
+    # Create the NatNet client node
+    natnet_config_path = os.path.join(
+        get_package_share_directory("mocap_optitrack_client"),
+        "config",
+        "natnetclient.yaml",
+    )
+    # Create the world to base client
+    w2b_config_path = os.path.join(
+        get_package_share_directory("hsa_inverse_kinematics"),
+        "config",
+        "world_to_base_y_up.yaml",
+    )
+
     launch_actions = [
+        Node(
+            package="mocap_optitrack_client",
+            executable="mocap_optitrack_client",
+            name="natnet_client",
+            parameters=[natnet_config_path, {"record": RECORD}],
+            arguments=["--ros-args", "--log-level", LOG_LEVEL],
+        ),
+        Node(
+            package="mocap_optitrack_w2b",
+            executable="mocap_optitrack_w2b",
+            name="world_to_base",
+            parameters=[w2b_config_path],
+            arguments=["--ros-args", "--log-level", LOG_LEVEL],
+        ),
+        Node(
+            package="hsa_inverse_kinematics",
+            executable="planar_cs_ik_node",
+            name="inverse_kinematics",
+            parameters=[common_params],
+            arguments=["--ros-args", "--log-level", LOG_LEVEL],
+        ),
         Node(
             package="hsa_visualization",
             executable="planar_viz_node",
@@ -52,10 +86,9 @@ def generate_launch_description():
             parameters=[viz_params],
         ),
         Node(
-            package="hsa_brain_control",
-            executable="planar_hsa_brain_control_node",
-            name="brain_control",
-            parameters=[common_params],
+            package="dynamixel_control",
+            executable="sync_read_single_write_node",
+            name="dynamixel_control",
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
         Node(
@@ -73,6 +106,13 @@ def generate_launch_description():
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
         Node(
+            package="hsa_brain_control",
+            executable="planar_hsa_brain_control_node",
+            name="brain_control",
+            parameters=[common_params],
+            arguments=["--ros-args", "--log-level", LOG_LEVEL],
+        ),
+        Node(
             package="hsa_trajectory_planner",
             executable="planar_bending_trajectory_node",
             name="trajectory_planner",
@@ -81,7 +121,7 @@ def generate_launch_description():
         ),
     ]
 
-    if RECORD_BAG:
+    if RECORD:
         launch_actions.append(
             ExecuteProcess(
                 cmd=["ros2", "bag", "record", "-a", "-o", BAG_PATH], output="screen"
