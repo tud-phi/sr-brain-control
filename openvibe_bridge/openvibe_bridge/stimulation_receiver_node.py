@@ -38,13 +38,13 @@ def main(args=None):
 
             # Decode the received data
             stimulation_type = decode_stimulation(tcp_data)
-            # node.get_logger().info(
-            #     f"Decoded msg to stimulation type: {stimulation_type}"
-            # )
+            node.get_logger().info(
+                f"Decoded msg to stimulation type: {stimulation_type}"
+            )
 
             brain_signal = 0
             # map the stimulation type to the brain signal {-1, 0, 1}
-            if stimulation_type == 16:
+            if stimulation_type == 6:
                 # no stimulation / effect
                 brain_signal = 0
             elif stimulation_type == 1:
