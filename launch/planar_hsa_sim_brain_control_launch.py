@@ -57,7 +57,7 @@ def generate_launch_description():
             parameters=[viz_params],
         ),
         TimerAction(
-            period=30.0,  # delay start of control node for simulation to be fully compiled and ready
+            period=40.0,  # delay start of control node for simulation to be fully compiled and ready
             actions=[
                 Node(
                     package="hsa_brain_control",
@@ -75,12 +75,17 @@ def generate_launch_description():
             parameters=[{"host": "145.94.193.117"}],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
-        Node(
-            package="hsa_trajectory_planner",
-            executable="planar_bending_trajectory_node",
-            name="trajectory_planner",
-            parameters=[planning_params],
-            arguments=["--ros-args", "--log-level", LOG_LEVEL],
+        TimerAction(
+            period=10.0,  # delay start of planner node for simulation to be fully compiled and ready
+            actions=[
+                Node(
+                    package="hsa_trajectory_planner",
+                    executable="planar_bending_trajectory_node",
+                    name="trajectory_planner",
+                    parameters=[planning_params],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+            ],
         ),
     ]
 
