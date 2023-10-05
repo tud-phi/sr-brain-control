@@ -34,6 +34,9 @@ common_params = {
     "phi_delta": np.pi / 250,  # step for each stimulation [rad]
     "phi_max": phi_max,
 }
+planning_params = common_params | {
+    "planning_frequency": 0.025  # period of 40s between setpoints
+}
 viz_params = common_params | {
     "rendering_frequency": 20.0,
 }
@@ -76,7 +79,7 @@ def generate_launch_description():
             package="hsa_trajectory_planner",
             executable="planar_bending_trajectory_node",
             name="trajectory_planner",
-            parameters=[common_params],
+            parameters=[planning_params],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
     ]
