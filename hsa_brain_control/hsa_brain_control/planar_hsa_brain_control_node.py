@@ -47,7 +47,7 @@ class PlanarHsaBrainControlNode(Node):
         self.get_logger().info("Received brain signal: %d" % brain_signal)
 
         # calculate control input
-        self.phi = self.phi + self.phi_delta * brain_signal * np.array([-1.0, 1.0])
+        self.phi = self.phi + self.phi_delta * brain_signal * np.array([1.0, -1.0])
 
         # saturate control input to [0.0, phi_max]
         self.phi = np.clip(
