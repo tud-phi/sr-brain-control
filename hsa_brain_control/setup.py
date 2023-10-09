@@ -25,7 +25,7 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "planar_hsa_brain_control_node = hsa_brain_control.planar_hsa_brain_control_node:main"
+            "planar_hsa_bending_brain_control_node = hsa_brain_control.planar_hsa_bending_brain_control_node:main"
         ],
     },
 )

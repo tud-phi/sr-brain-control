@@ -107,7 +107,7 @@ def generate_launch_description():
         ),
         Node(
             package="hsa_brain_control",
-            executable="planar_hsa_brain_control_node",
+            executable="planar_hsa_bending_brain_control_node",
             name="brain_control",
             parameters=[common_params],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
