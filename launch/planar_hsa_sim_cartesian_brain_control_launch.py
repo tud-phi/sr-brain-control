@@ -73,16 +73,16 @@ def generate_launch_description():
             package="openvibe_bridge",
             executable="stimulation_receiver_node",
             name="brain_signal_publisher",
-            parameters=[{"brain_control_mode": "bending", "host": "145.94.234.212"}],
+            parameters=[{"brain_control_mode": "cartesian", "host": "145.94.234.212"}],
             arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
         TimerAction(
-            period=10.0,  # delay start of planner node for simulation to be fully compiled and ready
+            period=10.0,  # delay start of setpoint generation node for simulation to be fully compiled and ready
             actions=[
                 Node(
-                    package="hsa_trajectory_planner",
-                    executable="planar_bending_trajectory_node",
-                    name="trajectory_planner",
+                    package="hsa_planar_control",
+                    executable="random_setpoints_node",
+                    name="random_setpoints_generator",
                     parameters=[planning_params],
                     arguments=["--ros-args", "--log-level", LOG_LEVEL],
                 ),
