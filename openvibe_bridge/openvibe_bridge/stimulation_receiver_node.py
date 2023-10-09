@@ -2,7 +2,8 @@
 
 import socket
 import rclpy
-from std_msgs.msg import Int32, Int32MultiArray  # Import the appropriate message type
+from example_interfaces.msg import Int32MultiArray
+from std_msgs.msg import Int32  # Import the appropriate message type
 
 
 def decode_stimulation(byte_data):
