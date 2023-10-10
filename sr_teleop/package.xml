@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>openvibe_bridge</name>
+  <name>sr_teleop</name>
   <version>0.0.0</version>
-  <description>Receive data from OpenViBE sent over a TCP socket and publish it as ROS2 messages.</description>
+  <description>TeleOperation for robots: Receive data from OpenViBE sent over a TCP socket and publish it as Joy ROS2 messages or read keyboard inputs.</description>
+  <author email="maximilian@stoelzle.ch">Maximilian Stölzle</maintainer>
   <maintainer email="maximilian@stoelzle.ch">Maximilian Stölzle</maintainer>
   <license>MIT</license>
 
+  <depend>keyboard</depend>
   <exec_depend>example_interfaces</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
 

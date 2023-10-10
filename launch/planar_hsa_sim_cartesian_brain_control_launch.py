@@ -14,10 +14,13 @@ RECORD = True  # Record data to rosbag file
 BAG_PATH = f"/home/mstoelzle/phd/rosbags/rosbag2_{now.strftime('%Y%m%d_%H%M%S')}"
 LOG_LEVEL = "warn"
 
+BRAIN_SIGNAL_SOURCE = "openvibe"  # "openvibe" or "keyboard"
+
 hsa_material = "fpu"
 kappa_b_eq = 0.0
 sigma_sh_eq = 0.0
 sigma_a_eq = 1.0
+controller_type = "basic_operational_space_pid"
 
 if hsa_material == "fpu":
     phi_max = 200 / 180 * np.pi
@@ -42,6 +45,21 @@ viz_params = common_params | {
     "invert_colors": True
 }
 
+control_params = common_params | {
+    "controller_type": controller_type,
+    "setpoint_topic": "/waypoint",
+}
+if controller_type == "basic_operational_space_pid":
+    control_params.update(
+        {
+            "Kp": 1.0e1,  # [rad/m]
+            "Ki": 1.1e2,  # [rad/(ms)]
+            "Kd": 2.5e-1,  # [rad s/m]
+        }
+    )
+else:
+    raise ValueError(f"Unknown controller type: {controller_type}")
+
 
 def generate_launch_description():
     launch_actions = [
@@ -56,6 +74,12 @@ def generate_launch_description():
             executable="planar_viz_node",
             name="visualization",
             parameters=[viz_params],
+        ),
+        Node(
+            package="hsa_planar_control",
+            executable="model_based_control_node",
+            name="model_based_control",
+            parameters=[control_params],
         ),
         TimerAction(
             period=40.0,  # delay start of control node for simulation to be fully compiled and ready
@@ -86,16 +110,16 @@ def generate_launch_description():
     if BRAIN_SIGNAL_SOURCE == "openvibe":
         launch_actions.append(
             Node(
-                package="openvibe_bridge",
-                executable="stimulation_receiver_node",
-                name="brain_signal_publisher",
+                package="sr_teleop",
+                executable="openvibe_stimulation_to_joy_node",
+                name="openvibe_teleop",
                 parameters=[{"brain_control_mode": "cartesian", "host": "145.94.234.212"}],
                 arguments=["--ros-args", "--log-level", LOG_LEVEL],
             ),
         )
     elif BRAIN_SIGNAL_SOURCE == "keyboard":
         keyboard2joy_filepath = os.path.join(
-            get_package_share_directory("hsa_brain_control"),
+            get_package_share_directory("sr_teleop"),
             "config",
             "keystroke2joy_cartesian.yaml",
         )
@@ -106,9 +130,9 @@ def generate_launch_description():
                 name="keyboard",
             ),
             Node(
-                package="hsa_brain_control",
+                package="sr_teleop",
                 executable="keyboard_to_joy_node",
-                name="keyboard_to_joy",
+                name="keyboard_teleop",
                 parameters=[{"config_filepath": str(keyboard2joy_filepath)}],
                 arguments=["--ros-args", "--log-level", LOG_LEVEL],
             ),
