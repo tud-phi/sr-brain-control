@@ -62,19 +62,12 @@ def generate_launch_description():
             actions=[
                 Node(
                     package="hsa_brain_control",
-                    executable="planar_hsa_brain_control_node",
+                    executable="planar_hsa_cartesian_brain_control_node",
                     name="brain_control",
                     parameters=[common_params],
                     arguments=["--ros-args", "--log-level", LOG_LEVEL],
                 ),
             ],
-        ),
-        Node(
-            package="openvibe_bridge",
-            executable="stimulation_receiver_node",
-            name="brain_signal_publisher",
-            parameters=[{"brain_control_mode": "cartesian", "host": "145.94.234.212"}],
-            arguments=["--ros-args", "--log-level", LOG_LEVEL],
         ),
         TimerAction(
             period=10.0,  # delay start of setpoint generation node for simulation to be fully compiled and ready
@@ -89,6 +82,39 @@ def generate_launch_description():
             ],
         ),
     ]
+
+    if BRAIN_SIGNAL_SOURCE == "openvibe":
+        launch_actions.append(
+            Node(
+                package="openvibe_bridge",
+                executable="stimulation_receiver_node",
+                name="brain_signal_publisher",
+                parameters=[{"brain_control_mode": "cartesian", "host": "145.94.234.212"}],
+                arguments=["--ros-args", "--log-level", LOG_LEVEL],
+            ),
+        )
+    elif BRAIN_SIGNAL_SOURCE == "keyboard":
+        keyboard2joy_filepath = os.path.join(
+            get_package_share_directory("hsa_brain_control"),
+            "config",
+            "keystroke2joy_cartesian.yaml",
+        )
+        launch_actions.extend([
+            Node(
+                package="keyboard",
+                executable="keyboard",
+                name="keyboard",
+            ),
+            Node(
+                package="hsa_brain_control",
+                executable="keyboard_to_joy_node",
+                name="keyboard_to_joy",
+                parameters=[{"config_filepath": str(keyboard2joy_filepath)}],
+                arguments=["--ros-args", "--log-level", LOG_LEVEL],
+            ),
+        ])
+    else:
+        raise ValueError(f"Unknown brain signal source: {BRAIN_SIGNAL_SOURCE}")
 
     if RECORD:
         launch_actions.append(

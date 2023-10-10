@@ -6,9 +6,9 @@ from example_interfaces.msg import Float64MultiArray
 from sensor_msgs.msg import Joy
 
 
-class PlanarHsaBrainControlNode(Node):
+class PlanarHsaBendingBrainControlNode(Node):
     def __init__(self):
-        super().__init__("planar_hsa_brain_control_node")
+        super().__init__("planar_hsa_bending_brain_control_node")
 
         # offset (neural) control input [rad]
         self.declare_parameter("phi_offset", np.pi / 2)
@@ -21,6 +21,10 @@ class PlanarHsaBrainControlNode(Node):
         # maximum magnitude of control input [rad]
         self.declare_parameter("phi_max", np.pi)
         self.phi_max = self.get_parameter("phi_max").value
+
+        # if the robot is platform-down, the coordinates are inverted and with that we also need to invert the brain signals
+        self.declare_parameter("invert_brain_signals", True)
+        self.invert_brain_signals = self.get_parameter("invert_brain_signals").value
 
         # publisher of control input
         self.declare_parameter("control_input_topic", "control_input")
@@ -42,12 +46,14 @@ class PlanarHsaBrainControlNode(Node):
         )
 
     def brain_signal_callback(self, msg: Joy):
-        # brain signal will be Int32 with values {-1, 0, 1}
         brain_signal = np.array(msg.axes).item()
         self.get_logger().info("Received brain signal: %d" % brain_signal)
 
         # calculate control input
-        self.phi = self.phi + self.phi_delta * brain_signal * np.array([1.0, -1.0])
+        if self.invert_brain_signals:
+            self.phi = self.phi + self.phi_delta * brain_signal * np.array([1.0, -1.0])
+        else:
+            self.phi = self.phi + self.phi_delta * brain_signal * np.array([-1.0, 1.0])
 
         # saturate control input to [0.0, phi_max]
         self.phi = np.clip(
@@ -61,9 +67,9 @@ class PlanarHsaBrainControlNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    print("Hi from hsa_brain_control.")
+    print("Hi from planar_hsa_bending_brain_control_node.")
 
-    node = PlanarHsaBrainControlNode()
+    node = PlanarHsaBendingBrainControlNode()
 
     rclpy.spin(node)
 
