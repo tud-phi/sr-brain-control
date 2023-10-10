@@ -34,7 +34,6 @@ common_params = {
     "kappa_b_eq": kappa_b_eq,
     "sigma_sh_eq": sigma_sh_eq,
     "sigma_a_eq": sigma_a_eq,
-    "phi_delta": np.pi / 250,  # step for each stimulation [rad]
     "phi_max": phi_max,
 }
 planning_params = common_params | {
@@ -44,10 +43,14 @@ viz_params = common_params | {
     "rendering_frequency": 20.0,
     "invert_colors": True
 }
-
+brain_control_params = common_params | {
+    "cartesian_delta": 1e-4,  # step for moving the waypoint [m]
+    "pee_y0": 0.11, # initial y coordinate position of the waypoint [m]
+}
 control_params = common_params | {
     "controller_type": controller_type,
     "setpoint_topic": "/waypoint",
+    "present_planar_actuation_topic": "/control_input",  # we neglect the actuation dynamics
 }
 if controller_type == "basic_operational_space_pid":
     control_params.update(
@@ -88,7 +91,7 @@ def generate_launch_description():
                     package="hsa_brain_control",
                     executable="planar_hsa_cartesian_brain_control_node",
                     name="brain_control",
-                    parameters=[common_params],
+                    parameters=[brain_control_params],
                     arguments=["--ros-args", "--log-level", LOG_LEVEL],
                 ),
             ],

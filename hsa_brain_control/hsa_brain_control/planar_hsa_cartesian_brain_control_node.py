@@ -27,8 +27,10 @@ class PlanarHsaCartesianBrainControlNode(Node):
         self.declare_parameter("invert_brain_signals", True)
         self.invert_brain_signals = self.get_parameter("invert_brain_signals").value
 
+        # intial waypoint position
+        self.declare_parameter("pee_y0", 0.0) # [m]
         # end-effector position desired by the brain / user
-        self.pee_des = jnp.zeros((2,))
+        self.pee_des = jnp.array([0.0, self.get_parameter("pee_y0").value])
 
         self.declare_parameter("brain_signal_topic", "brain_signal")
         self.brain_signal_sub = self.create_subscription(
