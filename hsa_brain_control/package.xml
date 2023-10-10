@@ -4,11 +4,13 @@
   <name>hsa_brain_control</name>
   <version>0.0.0</version>
   <description>Brain control of (planar) HSA robots.</description>
-  <maintainer email="sonal.baberwal2@mail.dcu.ie">Sonal Baberwal</maintainer>
+  <author email="maximilian@stoelzle.ch">Maximilian Stolzle</author>
+  <maintainer email="maximilian@stoelzle.ch">Maximilian Stolzle</maintainer>
   <license>MIT</license>
 
+  <depend>keyboard</depend>
   <exec_depend>example_interfaces</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

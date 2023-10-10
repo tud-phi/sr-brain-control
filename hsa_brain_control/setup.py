@@ -13,6 +13,7 @@ setup(
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
         ("share/" + package_name, ["package.xml"]),
         (os.path.join("share", package_name, "assets"), glob("assets/*")),
+        (os.path.join("share", package_name, "config"), glob("config/*")),
     ],
     install_requires=["setuptools"],
     zip_safe=True,
@@ -25,7 +26,9 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "planar_hsa_bending_brain_control_node = hsa_brain_control.planar_hsa_bending_brain_control_node:main"
+            "keyboard_to_joy_node = hsa_brain_control.keyboard_to_joy_node:main",
+            "planar_hsa_bending_brain_control_node = hsa_brain_control.planar_hsa_bending_brain_control_node:main",
+            "planar_hsa_cartesian_brain_control_node = hsa_brain_control.planar_hsa_cartesian_brain_control_node:main"
         ],
     },
 )

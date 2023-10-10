@@ -3,7 +3,7 @@ import rclpy
 from rclpy.node import Node
 
 from example_interfaces.msg import Float64MultiArray
-from std_msgs.msg import Int32
+from sensor_msgs.msg import Joy
 
 
 class PlanarHsaBrainControlNode(Node):
@@ -35,15 +35,15 @@ class PlanarHsaBrainControlNode(Node):
 
         self.declare_parameter("brain_signal_topic", "brain_signal")
         self.brain_signal_sub = self.create_subscription(
-            Int32,
+            Joy,
             self.get_parameter("brain_signal_topic").value,
             self.brain_signal_callback,
             10,
         )
 
-    def brain_signal_callback(self, msg: Int32):
+    def brain_signal_callback(self, msg: Joy):
         # brain signal will be Int32 with values {-1, 0, 1}
-        brain_signal = msg.data
+        brain_signal = np.array(msg.axes).item()
         self.get_logger().info("Received brain signal: %d" % brain_signal)
 
         # calculate control input
