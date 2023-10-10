@@ -110,7 +110,7 @@ def generate_launch_description():
     if BRAIN_SIGNAL_SOURCE == "openvibe":
         launch_actions.append(
             Node(
-                package="sr_teleop",
+                package="joylike_operation",
                 executable="openvibe_stimulation_to_joy_node",
                 name="openvibe_teleop",
                 parameters=[{"brain_control_mode": "cartesian", "host": "145.94.234.212"}],
@@ -119,7 +119,7 @@ def generate_launch_description():
         )
     elif BRAIN_SIGNAL_SOURCE == "keyboard":
         keyboard2joy_filepath = os.path.join(
-            get_package_share_directory("sr_teleop"),
+            get_package_share_directory("joylike_operation"),
             "config",
             "keystroke2joy_cartesian.yaml",
         )
@@ -130,7 +130,7 @@ def generate_launch_description():
                 name="keyboard",
             ),
             Node(
-                package="sr_teleop",
+                package="joylike_operation",
                 executable="keyboard_to_joy_node",
                 name="keyboard_teleop",
                 parameters=[{"config_filepath": str(keyboard2joy_filepath)}],
