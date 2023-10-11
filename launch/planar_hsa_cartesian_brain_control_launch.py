@@ -62,6 +62,13 @@ if controller_type == "basic_operational_space_pid":
             "Kd": 2.5e-1,  # [rad s/m]
         }
     )
+elif controller_type == "operational_space_impedance_control_linearized_actuation":
+    control_params.update(
+        {
+            "Kp": 2e3,  # [N/m]
+            "Kd": 0.0,  # [N s/m]
+        }
+    )
 else:
     raise ValueError(f"Unknown controller type: {controller_type}")
 
