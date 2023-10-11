@@ -14,6 +14,7 @@ RECORD = True  # Record data to rosbag file
 BAG_PATH = f"/home/mstoelzle/phd/rosbags/rosbag2_{now.strftime('%Y%m%d_%H%M%S')}"
 LOG_LEVEL = "warn"
 
+SYSTEM_TYPE = "robot"  # "sim" or "robot"
 BRAIN_SIGNAL_SOURCE = "openvibe"  # "openvibe" or "keyboard"
 
 hsa_material = "fpu"
@@ -49,9 +50,10 @@ brain_control_params = common_params | {
 }
 control_params = common_params | {
     "controller_type": controller_type,
-    "setpoint_topic": "/waypoint",
-    "present_planar_actuation_topic": "/control_input",  # we neglect the actuation dynamics
+    "setpoint_topic": "/waypoint", 
 }
+if SYSTEM_TYPE == "sim":
+    control_params["present_planar_actuation_topic"] = "/control_input",  # we neglect the actuation dynamics
 if controller_type == "basic_operational_space_pid":
     control_params.update(
         {
@@ -66,12 +68,6 @@ else:
 
 def generate_launch_description():
     launch_actions = [
-        Node(
-            package="hsa_sim",
-            executable="planar_sim_node",
-            name="simulation",
-            parameters=[common_params],
-        ),
         Node(
             package="hsa_visualization",
             executable="planar_viz_node",
@@ -109,6 +105,61 @@ def generate_launch_description():
             ],
         ),
     ]
+
+    if SYSTEM_TYPE == "sim":
+        launch_actions.append(
+            Node(
+                package="hsa_sim",
+                executable="planar_sim_node",
+                name="simulation",
+                parameters=[common_params],
+            ),
+        )
+    elif SYSTEM_TYPE == "robot":
+        # Create the NatNet client node
+        natnet_config_path = os.path.join(
+            get_package_share_directory("mocap_optitrack_client"),
+            "config",
+            "natnetclient.yaml",
+        )
+        # Create the world to base client
+        w2b_config_path = os.path.join(
+            get_package_share_directory("hsa_inverse_kinematics"),
+            "config",
+            "world_to_base_y_up.yaml",
+        )
+        launch_actions.extend([
+            Node(
+                package="mocap_optitrack_client",
+                executable="mocap_optitrack_client",
+                name="natnet_client",
+                parameters=[natnet_config_path, {"record": RECORD}],
+                arguments=["--ros-args", "--log-level", LOG_LEVEL],
+            ),
+            Node(
+                package="mocap_optitrack_w2b",
+                executable="mocap_optitrack_w2b",
+                name="world_to_base",
+                parameters=[w2b_config_path],
+                arguments=["--ros-args", "--log-level", LOG_LEVEL],
+            ),
+            Node(
+                package="hsa_inverse_kinematics",
+                executable="planar_cs_ik_node",
+                name="inverse_kinematics",
+                parameters=[common_params],
+                arguments=["--ros-args", "--log-level", LOG_LEVEL],
+            ),
+            Node(
+                package="hsa_velocity_estimation",
+                executable="planar_hsa_velocity_estimator_node",
+                name="velocity_estimator",
+                parameters=[common_params],
+                arguments=["--ros-args", "--log-level", LOG_LEVEL],
+            ),
+        ])
+    else:
+        raise ValueError(f"Unknown system type {SYSTEM_TYPE}.")
 
     if BRAIN_SIGNAL_SOURCE == "openvibe":
         launch_actions.append(
