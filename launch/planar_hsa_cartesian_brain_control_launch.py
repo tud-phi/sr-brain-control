@@ -53,7 +53,7 @@ control_params = common_params | {
     "setpoint_topic": "/waypoint", 
 }
 if SYSTEM_TYPE == "sim":
-    control_params["present_planar_actuation_topic"] = "/control_input",  # we neglect the actuation dynamics
+    control_params["present_planar_actuation_topic"] = "/control_input"  # we neglect the actuation dynamics
 if controller_type == "basic_operational_space_pid":
     control_params.update(
         {
