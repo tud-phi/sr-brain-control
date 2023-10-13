@@ -21,7 +21,7 @@ hsa_material = "fpu"
 kappa_b_eq = 0.0
 sigma_sh_eq = 0.0
 sigma_a_eq = 1.0
-controller_type = "operational_space_impedance_control_linearized_actuation"
+controller_type = "operational_space_impedance_control_nonlinear_actuation"
 
 if hsa_material == "fpu":
     phi_max = 200 / 180 * np.pi
@@ -50,7 +50,7 @@ brain_control_params = common_params | {
 }
 control_params = common_params | {
     "controller_type": controller_type,
-    "control_frequency": 100.0,
+    "control_frequency": 40.0,
     "setpoint_topic": "/waypoint", 
 }
 sim_params = None
@@ -85,6 +85,13 @@ elif controller_type == "operational_space_impedance_control_linearized_actuatio
         )
     else:
         raise ValueError(f"Unknown HSA material: {hsa_material}")
+elif controller_type == "operational_space_impedance_control_nonlinear_actuation":
+    control_params.update(
+        {
+            "Kp": 1e3,  # [N/m]
+            "Kd": 0e0,  # [N s/m]
+        }
+    )
 else:
     raise ValueError(f"Unknown controller type: {controller_type}")
 
