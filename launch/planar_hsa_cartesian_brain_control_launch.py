@@ -50,12 +50,14 @@ brain_control_params = common_params | {
 }
 control_params = common_params | {
     "controller_type": controller_type,
+    "control_frequency": 100.0,
     "setpoint_topic": "/waypoint", 
 }
 sim_params = None
 if SYSTEM_TYPE == "sim":
     sim_params = common_params | {
-        "sim_dt": 4e-5
+        "sim_dt": 4e-5,
+        "control_frequency": control_params["control_frequency"],
     }
     control_params["present_planar_actuation_topic"] = "/control_input"  # we neglect the actuation dynamics
 if controller_type == "basic_operational_space_pid":
@@ -178,7 +180,7 @@ def generate_launch_description():
                 package="hsa_actuation",
                 executable="hsa_planar_actuation_by_msg_node",
                 name="actuation",
-                parameters=[common_params],
+                parameters=[common_params, {"present_motor_angles_frequency": control_params["control_frequency"]}],
                 arguments=["--ros-args", "--log-level", LOG_LEVEL],
             ),
         ])
