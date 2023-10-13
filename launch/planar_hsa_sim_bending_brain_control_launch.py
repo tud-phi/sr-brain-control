@@ -39,10 +39,7 @@ common_params = {
 planning_params = common_params | {
     "planning_frequency": 0.025  # period of 40s between setpoints
 }
-viz_params = common_params | {
-    "rendering_frequency": 20.0,
-    "invert_colors": True
-}
+viz_params = common_params | {"rendering_frequency": 20.0, "invert_colors": True}
 
 
 def generate_launch_description():

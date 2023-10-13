@@ -76,7 +76,11 @@ class KeyboardToJoyNode(Node):
             self.get_parameter("config_filepath").get_parameter_value().string_value
         )
         if config_filepath == "None":
-            config_filepath = Path(get_package_share_directory("hsa_brain_control")) / "config" / "keystroke2joy_cartesian.yaml"
+            config_filepath = (
+                Path(get_package_share_directory("hsa_brain_control"))
+                / "config"
+                / "keystroke2joy_cartesian.yaml"
+            )
 
         self.declare_parameter("sampling_frequency", 50)
         hz = (
@@ -97,7 +101,9 @@ class KeyboardToJoyNode(Node):
         self.joy = Joy()
         self.declare_parameter("brain_signal_topic", "brain_signal")
         brain_signal_topic = self.get_parameter("brain_signal_topic").value
-        self.joy_pub = self.create_publisher(Joy, brain_signal_topic, qos.qos_profile_system_default)
+        self.joy_pub = self.create_publisher(
+            Joy, brain_signal_topic, qos.qos_profile_system_default
+        )
 
         # Keyboard callback
         self.keydown_sub = self.create_subscription(

@@ -28,7 +28,7 @@ class PlanarHsaCartesianBrainControlNode(Node):
         self.invert_brain_signals = self.get_parameter("invert_brain_signals").value
 
         # intial waypoint position
-        self.declare_parameter("pee_y0", 0.0) # [m]
+        self.declare_parameter("pee_y0", 0.0)  # [m]
         # end-effector position desired by the brain / user
         self.pee_wp = jnp.array([0.0, self.get_parameter("pee_y0").value])
 
@@ -54,7 +54,9 @@ class PlanarHsaCartesianBrainControlNode(Node):
         msg = PlanarSetpoint()
         # we don't specify the orientation of the end-effector
         # so we just set a dummy value
-        msg.chiee_des = Pose2D(x=self.pee_wp[0].item(), y=self.pee_wp[1].item(), theta=0.0)
+        msg.chiee_des = Pose2D(
+            x=self.pee_wp[0].item(), y=self.pee_wp[1].item(), theta=0.0
+        )
         self.waypoint_pub.publish(msg)
 
 

@@ -40,18 +40,15 @@ common_params = {
 planning_params = common_params | {
     "planning_frequency": 0.025  # period of 40s between setpoints
 }
-viz_params = common_params | {
-    "rendering_frequency": 20.0,
-    "invert_colors": True
-}
+viz_params = common_params | {"rendering_frequency": 20.0, "invert_colors": True}
 brain_control_params = common_params | {
     "cartesian_delta": 1e-4,  # step for moving the waypoint [m]
-    "pee_y0": 0.11, # initial y coordinate position of the waypoint [m]
+    "pee_y0": 0.11,  # initial y coordinate position of the waypoint [m]
 }
 control_params = common_params | {
     "controller_type": controller_type,
     "control_frequency": 40.0,
-    "setpoint_topic": "/waypoint", 
+    "setpoint_topic": "/waypoint",
 }
 sim_params = None
 if SYSTEM_TYPE == "sim":
@@ -59,7 +56,9 @@ if SYSTEM_TYPE == "sim":
         "sim_dt": 4e-5,
         "control_frequency": control_params["control_frequency"],
     }
-    control_params["present_planar_actuation_topic"] = "/control_input"  # we neglect the actuation dynamics
+    control_params[
+        "present_planar_actuation_topic"
+    ] = "/control_input"  # we neglect the actuation dynamics
 if controller_type == "basic_operational_space_pid":
     control_params.update(
         {
@@ -158,49 +157,58 @@ def generate_launch_description():
             "config",
             "world_to_base_y_up.yaml",
         )
-        launch_actions.extend([
-            Node(
-                package="mocap_optitrack_client",
-                executable="mocap_optitrack_client",
-                name="natnet_client",
-                parameters=[natnet_config_path, {"record": RECORD}],
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-            Node(
-                package="mocap_optitrack_w2b",
-                executable="mocap_optitrack_w2b",
-                name="world_to_base",
-                parameters=[w2b_config_path],
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-            Node(
-                package="hsa_inverse_kinematics",
-                executable="planar_cs_ik_node",
-                name="inverse_kinematics",
-                parameters=[common_params],
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-            Node(
-                package="hsa_velocity_estimation",
-                executable="planar_hsa_velocity_estimator_node",
-                name="velocity_estimator",
-                parameters=[common_params],
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-            Node(
-                package="dynamixel_control",
-                executable="sync_read_single_write_node",
-                name="dynamixel_control",
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-            Node(
-                package="hsa_actuation",
-                executable="hsa_planar_actuation_by_msg_node",
-                name="actuation",
-                parameters=[common_params, {"present_motor_angles_frequency": control_params["control_frequency"]}],
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-        ])
+        launch_actions.extend(
+            [
+                Node(
+                    package="mocap_optitrack_client",
+                    executable="mocap_optitrack_client",
+                    name="natnet_client",
+                    parameters=[natnet_config_path, {"record": RECORD}],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+                Node(
+                    package="mocap_optitrack_w2b",
+                    executable="mocap_optitrack_w2b",
+                    name="world_to_base",
+                    parameters=[w2b_config_path],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+                Node(
+                    package="hsa_inverse_kinematics",
+                    executable="planar_cs_ik_node",
+                    name="inverse_kinematics",
+                    parameters=[common_params],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+                Node(
+                    package="hsa_velocity_estimation",
+                    executable="planar_hsa_velocity_estimator_node",
+                    name="velocity_estimator",
+                    parameters=[common_params],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+                Node(
+                    package="dynamixel_control",
+                    executable="sync_read_single_write_node",
+                    name="dynamixel_control",
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+                Node(
+                    package="hsa_actuation",
+                    executable="hsa_planar_actuation_by_msg_node",
+                    name="actuation",
+                    parameters=[
+                        common_params,
+                        {
+                            "present_motor_angles_frequency": control_params[
+                                "control_frequency"
+                            ]
+                        },
+                    ],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+            ]
+        )
     else:
         raise ValueError(f"Unknown system type {SYSTEM_TYPE}.")
 
@@ -210,7 +218,9 @@ def generate_launch_description():
                 package="joylike_operation",
                 executable="openvibe_stimulation_to_joy_node",
                 name="openvibe_teleop",
-                parameters=[{"brain_control_mode": "cartesian", "host": "145.94.234.212"}],
+                parameters=[
+                    {"brain_control_mode": "cartesian", "host": "145.94.234.212"}
+                ],
                 arguments=["--ros-args", "--log-level", LOG_LEVEL],
             ),
         )
@@ -220,20 +230,22 @@ def generate_launch_description():
             "config",
             "keystroke2joy_cartesian.yaml",
         )
-        launch_actions.extend([
-            Node(
-                package="keyboard",
-                executable="keyboard",
-                name="keyboard",
-            ),
-            Node(
-                package="joylike_operation",
-                executable="keyboard_to_joy_node",
-                name="keyboard_teleop",
-                parameters=[{"config_filepath": str(keyboard2joy_filepath)}],
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-        ])
+        launch_actions.extend(
+            [
+                Node(
+                    package="keyboard",
+                    executable="keyboard",
+                    name="keyboard",
+                ),
+                Node(
+                    package="joylike_operation",
+                    executable="keyboard_to_joy_node",
+                    name="keyboard_teleop",
+                    parameters=[{"config_filepath": str(keyboard2joy_filepath)}],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+            ]
+        )
     else:
         raise ValueError(f"Unknown brain signal source: {BRAIN_SIGNAL_SOURCE}")
 

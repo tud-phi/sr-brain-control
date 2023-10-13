@@ -19,7 +19,9 @@ def main(args=None):
     node = rclpy.create_node("stimulation_receiver_node")
 
     node.declare_parameter("brain_control_mode", "bending")
-    brain_control_mode = node.get_parameter("brain_control_mode").value  # bending or cartesian
+    brain_control_mode = node.get_parameter(
+        "brain_control_mode"
+    ).value  # bending or cartesian
 
     node.declare_parameter("brain_signal_topic", "brain_signal")
     brain_signal_topic = node.get_parameter("brain_signal_topic").value
@@ -61,7 +63,9 @@ def main(args=None):
                     # bending to the right
                     brain_signal = [-1.0]
                 else:
-                    node.get_logger().error(f"Unknown stimulation type: {stimulation_type}")
+                    node.get_logger().error(
+                        f"Unknown stimulation type: {stimulation_type}"
+                    )
                     continue
             elif brain_control_mode == "cartesian":
                 brain_signal = [0.0, 0.0]
@@ -82,11 +86,13 @@ def main(args=None):
                     # move down
                     brain_signal = [0.0, -1.0]
                 else:
-                    node.get_logger().error(f"Unknown stimulation type: {stimulation_type}")
+                    node.get_logger().error(
+                        f"Unknown stimulation type: {stimulation_type}"
+                    )
                     continue
             else:
                 raise ValueError(f"Unknown brain control mode: {brain_control_mode}")
-            
+
             # Create an instance of your custom message
             # Assign received data to the message field
             msg = Joy(axes=brain_signal)

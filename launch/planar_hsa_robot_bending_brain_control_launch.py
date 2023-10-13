@@ -39,10 +39,7 @@ common_params = {
 planning_params = common_params | {
     "planning_frequency": 0.025  # period of 40s between setpoints
 }
-viz_params = common_params | {
-    "rendering_frequency": 20.0,
-    "invert_colors": True
-}
+viz_params = common_params | {"rendering_frequency": 20.0, "invert_colors": True}
 
 
 def generate_launch_description():
@@ -122,7 +119,9 @@ def generate_launch_description():
                 package="joylike_operation",
                 executable="openvibe_stimulation_to_joy_node",
                 name="openvibe_teleop",
-                parameters=[{"brain_control_mode": "bending", "host": "145.94.234.212"}],
+                parameters=[
+                    {"brain_control_mode": "bending", "host": "145.94.234.212"}
+                ],
                 arguments=["--ros-args", "--log-level", LOG_LEVEL],
             ),
         )
@@ -132,20 +131,22 @@ def generate_launch_description():
             "config",
             "keystroke2joy_bending.yaml",
         )
-        launch_actions.extend([
-            Node(
-                package="keyboard",
-                executable="keyboard",
-                name="keyboard",
-            ),
-            Node(
-                package="joylike_operation",
-                executable="keyboard_to_joy_node",
-                name="keyboard_teleop",
-                parameters=[{"config_filepath": str(keyboard2joy_filepath)}],
-                arguments=["--ros-args", "--log-level", LOG_LEVEL],
-            ),
-        ])
+        launch_actions.extend(
+            [
+                Node(
+                    package="keyboard",
+                    executable="keyboard",
+                    name="keyboard",
+                ),
+                Node(
+                    package="joylike_operation",
+                    executable="keyboard_to_joy_node",
+                    name="keyboard_teleop",
+                    parameters=[{"config_filepath": str(keyboard2joy_filepath)}],
+                    arguments=["--ros-args", "--log-level", LOG_LEVEL],
+                ),
+            ]
+        )
     else:
         raise ValueError(f"Unknown brain signal source: {BRAIN_SIGNAL_SOURCE}")
 
