@@ -69,12 +69,22 @@ if controller_type == "basic_operational_space_pid":
         }
     )
 elif controller_type == "operational_space_impedance_control_linearized_actuation":
-    control_params.update(
-        {
-            "Kp": 2e2,  # [N/m]
-            "Kd": 0.0,  # [N s/m]
-        }
-    )
+    if hsa_material == "fpu":
+        control_params.update(
+            {
+                "Kp": 5e1,  # [N/m]
+                "Kd": 0e0,  # [N s/m]
+            }
+        )
+    elif hsa_material == "epu":
+        control_params.update(
+            {
+                "Kp": 2e2,  # [N/m]
+                "Kd": 1e0,  # [N s/m]
+            }
+        )
+    else:
+        raise ValueError(f"Unknown HSA material: {hsa_material}")
 else:
     raise ValueError(f"Unknown controller type: {controller_type}")
 
