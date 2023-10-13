@@ -30,7 +30,7 @@ class PlanarHsaCartesianBrainControlNode(Node):
         # intial waypoint position
         self.declare_parameter("pee_y0", 0.0) # [m]
         # end-effector position desired by the brain / user
-        self.pee_des = jnp.array([0.0, self.get_parameter("pee_y0").value])
+        self.pee_wp = jnp.array([0.0, self.get_parameter("pee_y0").value])
 
         self.declare_parameter("brain_signal_topic", "brain_signal")
         self.brain_signal_sub = self.create_subscription(
@@ -46,15 +46,15 @@ class PlanarHsaCartesianBrainControlNode(Node):
 
         # compute the position of the next waypoint
         if self.invert_brain_signals:
-            self.pee_des = self.pee_des - self.cartesian_delta * brain_signal
+            self.pee_wp = self.pee_wp - self.cartesian_delta * brain_signal
         else:
-            self.pee_des = self.pee_des + self.cartesian_delta * brain_signal
+            self.pee_wp = self.pee_wp + self.cartesian_delta * brain_signal
 
         # publish waypoint
         msg = PlanarSetpoint()
         # we don't specify the orientation of the end-effector
         # so we just set a dummy value
-        msg.chiee_des = Pose2D(x=self.pee_des[0].item(), y=self.pee_des[1].item(), theta=0.0)
+        msg.chiee_des = Pose2D(x=self.pee_wp[0].item(), y=self.pee_wp[1].item(), theta=0.0)
         self.waypoint_pub.publish(msg)
 
 
