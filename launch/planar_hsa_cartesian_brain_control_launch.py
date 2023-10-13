@@ -21,7 +21,7 @@ hsa_material = "fpu"
 kappa_b_eq = 0.0
 sigma_sh_eq = 0.0
 sigma_a_eq = 1.0
-controller_type = "basic_operational_space_pid"
+controller_type = "operational_space_impedance_control_linearized_actuation"
 
 if hsa_material == "fpu":
     phi_max = 200 / 180 * np.pi
@@ -71,7 +71,7 @@ if controller_type == "basic_operational_space_pid":
 elif controller_type == "operational_space_impedance_control_linearized_actuation":
     control_params.update(
         {
-            "Kp": 2e3,  # [N/m]
+            "Kp": 2e2,  # [N/m]
             "Kd": 0.0,  # [N s/m]
         }
     )
