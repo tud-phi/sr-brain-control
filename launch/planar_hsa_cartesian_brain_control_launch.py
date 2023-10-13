@@ -52,7 +52,11 @@ control_params = common_params | {
     "controller_type": controller_type,
     "setpoint_topic": "/waypoint", 
 }
+sim_params = None
 if SYSTEM_TYPE == "sim":
+    sim_params = common_params | {
+        "sim_dt": 4e-5
+    }
     control_params["present_planar_actuation_topic"] = "/control_input"  # we neglect the actuation dynamics
 if controller_type == "basic_operational_space_pid":
     control_params.update(
@@ -119,7 +123,7 @@ def generate_launch_description():
                 package="hsa_sim",
                 executable="planar_sim_node",
                 name="simulation",
-                parameters=[common_params],
+                parameters=[sim_params],
             ),
         )
     elif SYSTEM_TYPE == "robot":
