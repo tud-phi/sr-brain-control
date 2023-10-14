@@ -21,7 +21,7 @@ hsa_material = "fpu"
 kappa_b_eq = 0.0
 sigma_sh_eq = 0.0
 sigma_a_eq = 1.0
-controller_type = "operational_space_impedance_control_nonlinear_actuation"
+controller_type = "operational_space_pd_plus_nonlinear_actuation"
 
 if hsa_material == "fpu":
     phi_max = 200 / 180 * np.pi
@@ -67,7 +67,7 @@ if controller_type == "basic_operational_space_pid":
             "Kd": 2.5e-1,  # [rad s/m]
         }
     )
-elif controller_type == "operational_space_impedance_control_linearized_actuation":
+elif controller_type == "operational_space_pd_plus_linearized_actuation":
     if hsa_material == "fpu":
         control_params.update(
             {
@@ -84,7 +84,7 @@ elif controller_type == "operational_space_impedance_control_linearized_actuatio
         )
     else:
         raise ValueError(f"Unknown HSA material: {hsa_material}")
-elif controller_type == "operational_space_impedance_control_nonlinear_actuation":
+elif controller_type == "operational_space_pd_plus_nonlinear_actuation":
     control_params.update(
         {
             "Kp": 1e3,  # [N/m]
