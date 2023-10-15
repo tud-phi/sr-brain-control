@@ -20,7 +20,7 @@ BRAIN_SIGNAL_SOURCE = "openvibe"  # "openvibe" or "keyboard"
 hsa_material = "fpu"
 kappa_b_eq = 0.0
 sigma_sh_eq = 0.0
-sigma_a_eq = 1.0
+sigma_a_eq1, sigma_a_eq2 = 1.0, 1.0
 controller_type = "operational_space_pd_plus_nonlinear_actuation"
 
 if hsa_material == "fpu":
@@ -34,7 +34,8 @@ common_params = {
     "hsa_material": hsa_material,
     "kappa_b_eq": kappa_b_eq,
     "sigma_sh_eq": sigma_sh_eq,
-    "sigma_a_eq": sigma_a_eq,
+    "sigma_a_eq1": sigma_a_eq1,
+    "sigma_a_eq2": sigma_a_eq2,
     "phi_max": phi_max,
 }
 planning_params = common_params | {
