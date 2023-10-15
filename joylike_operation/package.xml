@@ -4,7 +4,6 @@
   <name>joylike_operation</name>
   <version>0.0.0</version>
   <description>TeleOperation for robots: Receive data from OpenViBE sent over a TCP socket and publish it as Joy ROS2 messages or read keyboard inputs.</description>
-  <author email="maximilian@stoelzle.ch">Maximilian Stölzle</maintainer>
   <maintainer email="maximilian@stoelzle.ch">Maximilian Stölzle</maintainer>
   <license>MIT</license>
 
