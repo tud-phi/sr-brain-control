@@ -43,13 +43,13 @@ planning_params = common_params | {
 }
 viz_params = common_params | {"rendering_frequency": 20.0, "invert_colors": True}
 brain_control_params = common_params | {
-    "cartesian_delta": 1e-4,  # step for moving the waypoint [m]
-    "pee_y0": 0.11,  # initial y coordinate position of the waypoint [m]
+    "cartesian_delta": 1e-4,  # step for moving the attractor [m]
+    "pee_y0": 0.11,  # initial y coordinate position of the attractor [m]
 }
 control_params = common_params | {
     "controller_type": controller_type,
-    "control_frequency": 40.0,
-    "setpoint_topic": "/waypoint",
+    "control_frequency": 50.0,
+    "setpoint_topic": "/attractor",
 }
 sim_params = None
 if SYSTEM_TYPE == "sim":

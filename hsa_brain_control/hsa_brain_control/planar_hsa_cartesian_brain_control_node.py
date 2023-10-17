@@ -17,17 +17,17 @@ class PlanarHsaCartesianBrainControlNode(Node):
         self.declare_parameter("cartesian_delta", 1e-4)  # 0.1 mm
         self.cartesian_delta = self.get_parameter("cartesian_delta").value
 
-        # publisher of waypoints planned by the brain / user
-        self.declare_parameter("waypoint_topic", "waypoint")
-        self.waypoint_pub = self.create_publisher(
-            PlanarSetpoint, self.get_parameter("waypoint_topic").value, 10
+        # publisher of attractors planned by the brain / user
+        self.declare_parameter("attractor_topic", "attractor")
+        self.attractor_pub = self.create_publisher(
+            PlanarSetpoint, self.get_parameter("attractor_topic").value, 10
         )
 
         # if the robot is platform-down, the coordinates are inverted and with that we also need to invert the brain signals
         self.declare_parameter("invert_brain_signals", True)
         self.invert_brain_signals = self.get_parameter("invert_brain_signals").value
 
-        # intial waypoint position
+        # intial attractor position
         self.declare_parameter("pee_y0", 0.0)  # [m]
         # end-effector position desired by the brain / user
         self.pee_wp = jnp.array([0.0, self.get_parameter("pee_y0").value])
@@ -44,20 +44,20 @@ class PlanarHsaCartesianBrainControlNode(Node):
         brain_signal = jnp.array(msg.axes)
         self.get_logger().info(f"Received brain signal: {brain_signal}")
 
-        # compute the position of the next waypoint
+        # compute the position of the next attractor
         if self.invert_brain_signals:
             self.pee_wp = self.pee_wp - self.cartesian_delta * brain_signal
         else:
             self.pee_wp = self.pee_wp + self.cartesian_delta * brain_signal
 
-        # publish waypoint
+        # publish attractor
         msg = PlanarSetpoint()
         # we don't specify the orientation of the end-effector
         # so we just set a dummy value
         msg.chiee_des = Pose2D(
             x=self.pee_wp[0].item(), y=self.pee_wp[1].item(), theta=0.0
         )
-        self.waypoint_pub.publish(msg)
+        self.attractor_pub.publish(msg)
 
 
 def main(args=None):
