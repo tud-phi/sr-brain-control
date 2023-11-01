@@ -21,9 +21,11 @@ plt.rcParams.update(
     }
 )
 
-EXPERIMENT_ID = "20231031_185546"  # experiment id
+EXPERIMENT_ID = "20231031_203004"  # experiment id
 
-DURATION = 543.0  # duration of the experiment [s]
+TRAJECTORY_TYPE = "setpoint_regulation"  # trajectory type. Can be "setpoint_regulation" or "adl"
+REL_START_TIME = 0.0  # relative start time of the experiment [s]
+DURATION = None
 if EXPERIMENT_ID == "20231031_185546":
     # setpoint regulation with brain controller
     CONTROLLER_TYPE = "brain"  # "computational", "brain", or "keyboard"
@@ -33,8 +35,17 @@ elif EXPERIMENT_ID == "20231031_181745":
 elif EXPERIMENT_ID == "20231030_181558":
     # setpoint regulation with computational controller
     CONTROLLER_TYPE = "computational"  # "computational", "brain", or "keyboard"
+elif EXPERIMENT_ID == "20231031_203004":
+    # hairspray interaction with brain controller
+    CONTROLLER_TYPE = "brain"  # "computational", "brain", or "keyboard"
+    DURATION = None
+    TRAJECTORY_TYPE = "adl"  # trajectory type
 else:
     CONTROLLER_TYPE = "brain"
+
+if TRAJECTORY_TYPE == "setpoint_regulation":
+    DURATION = 543.0  # duration of the experiment [s]
+
 
 def main():
     experiment_folder = Path("data") / "experiments" / EXPERIMENT_ID
@@ -44,7 +55,10 @@ def main():
         data_ts = dill.load(f)
 
     # absolute start time of the experiment
-    start_time = data_ts["ts_chiee_des"][0]
+    if TRAJECTORY_TYPE == "setpoint_regulation":
+        start_time = data_ts["ts_chiee_des"][0] + REL_START_TIME
+    else:
+        start_time = data_ts["controller_info_ts"]["ts"][0] + REL_START_TIME
     # trim the dictionary with the time series data
     data_ts = trim_time_series_data(data_ts, start_time, DURATION)
     ci_ts = data_ts["controller_info_ts"]
@@ -63,26 +77,27 @@ def main():
     plt.figure(figsize=figsize, num="End-effector position")
     ax = plt.gca()
     # plot the desired end-effector position
-    ax.step(
-        data_ts["ts_chiee_des"],
-        data_ts["chiee_des_ts"][:, 0] * 1e3,
-        where="post",
-        color=colors[0],
-        linestyle="--",
-        dashes=dashes,
-        linewidth=linewidth_dashed,
-        label=r"$x^\mathrm{d}$",
-    )
-    ax.step(
-        data_ts["ts_chiee_des"],
-        data_ts["chiee_des_ts"][:, 1] * 1e3,
-        where="post",
-        color=colors[1],
-        linestyle="--",
-        dashes=dashes,
-        linewidth=linewidth_dashed,
-        label=r"$y^\mathrm{d}$",
-    )
+    if "ts_chiee_des" in data_ts.keys() and "chiee_des_ts" in data_ts.keys():
+        ax.step(
+            data_ts["ts_chiee_des"],
+            data_ts["chiee_des_ts"][:, 0] * 1e3,
+            where="post",
+            color=colors[0],
+            linestyle="--",
+            dashes=dashes,
+            linewidth=linewidth_dashed,
+            label=r"$x^\mathrm{d}$",
+        )
+        ax.step(
+            data_ts["ts_chiee_des"],
+            data_ts["chiee_des_ts"][:, 1] * 1e3,
+            where="post",
+            color=colors[1],
+            linestyle="--",
+            dashes=dashes,
+            linewidth=linewidth_dashed,
+            label=r"$y^\mathrm{d}$",
+        )
     if CONTROLLER_TYPE != "computational":
         # plot the attractor position
         ax.plot(
@@ -119,10 +134,11 @@ def main():
     )
     plt.xlabel(r"Time $t$ [s]")
     plt.ylabel(r"End-effector position $x$ [mm]")
-    if CONTROLLER_TYPE == "computational":
-        plt.legend(ncols=2)
-    else:
+    if TRAJECTORY_TYPE == "setpoint_regulation" and CONTROLLER_TYPE != "computational":
         plt.legend(ncols=3)
+    else:
+        plt.legend(ncols=2)
+
     plt.grid(True)
     plt.box(True)
     plt.tight_layout()
@@ -133,16 +149,17 @@ def main():
     plt.figure(figsize=figsize, num="End-effector position x-axis")
     ax = plt.gca()
     # plot the desired end-effector position
-    ax.step(
-        data_ts["ts_chiee_des"],
-        data_ts["chiee_des_ts"][:, 0] * 1e3,
-        where="post",
-        color=colors[0],
-        linestyle="--",
-        dashes=dashes,
-        linewidth=linewidth_dashed,
-        label=r"$x^\mathrm{d}$",
-    )
+    if "ts_chiee_des" in data_ts.keys() and "chiee_des_ts" in data_ts.keys():
+        ax.step(
+            data_ts["ts_chiee_des"],
+            data_ts["chiee_des_ts"][:, 0] * 1e3,
+            where="post",
+            color=colors[0],
+            linestyle="--",
+            dashes=dashes,
+            linewidth=linewidth_dashed,
+            label=r"$x^\mathrm{d}$",
+        )
     if CONTROLLER_TYPE != "computational":
         # plot the attractor position
         ax.plot(
@@ -174,16 +191,17 @@ def main():
     plt.figure(figsize=figsize, num="End-effector position y-axis")
     ax = plt.gca()
     # plot the desired end-effector position
-    ax.step(
-        data_ts["ts_chiee_des"],
-        data_ts["chiee_des_ts"][:, 1] * 1e3,
-        where="post",
-        color=colors[0],
-        linestyle="--",
-        dashes=dashes,
-        linewidth=linewidth_dashed,
-        label=r"$x^\mathrm{d}$",
-    )
+    if "ts_chiee_des" in data_ts.keys() and "chiee_des_ts" in data_ts.keys():
+        ax.step(
+            data_ts["ts_chiee_des"],
+            data_ts["chiee_des_ts"][:, 1] * 1e3,
+            where="post",
+            color=colors[0],
+            linestyle="--",
+            dashes=dashes,
+            linewidth=linewidth_dashed,
+            label=r"$x^\mathrm{d}$",
+        )
     if CONTROLLER_TYPE != "computational":
         # plot the attractor position
         ax.plot(
