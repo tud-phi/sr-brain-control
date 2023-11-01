@@ -126,7 +126,7 @@ def main():
         linewidth=linewidth_solid,
         label=r"$y$",
     )
-    plt.xlabel(r"$t$ [s]")
+    plt.xlabel(r"Time $t$ [s]")
     plt.ylabel(r"End-effector position $p_\mathrm{ee}$ [mm]")
     if CONTROLLER_TYPE == "computational":
         plt.legend(ncols=2)
@@ -155,7 +155,7 @@ def main():
         linewidth=linewidth_solid,
         label=r"$\phi_2$",
     )
-    plt.xlabel(r"$t$ [s]")
+    plt.xlabel(r"Time $t$ [s]")
     plt.ylabel(r"Control input $\phi$ [rad]")
     plt.legend()
     plt.grid(True)
@@ -189,7 +189,7 @@ def main():
         linewidth=linewidth_solid,
         label=r"$\sigma_\mathrm{ax}$",
     )
-    ax1.set_xlabel(r"$t$ [s]")
+    ax1.set_xlabel(r"Time $t$ [s]")
     ax1.set_ylabel(r"Bending strain $\kappa_\mathrm{be}$ [rad/m]")
     ax2.set_ylabel(r"Linear strains $\sigma$ [-]")
     ax1.legend(loc="upper left")
@@ -200,6 +200,33 @@ def main():
     plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_q.pdf"))
     plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_q.eps"))
     plt.show()
+
+    if CONTROLLER_TYPE != "computational":
+        fig = plt.figure(figsize=figsize, num="Joy signal")
+        ax = plt.gca()
+        ax.plot(
+            data_ts["ts_joy_signal"],
+            data_ts["joy_signal_ts"][:, 0],
+            color=colors[0],
+            linewidth=linewidth_solid,
+            label=r"$u_x$",
+        )
+        ax.plot(
+            data_ts["ts_joy_signal"],
+            data_ts["joy_signal_ts"][:, 0],
+            color=colors[1],
+            linewidth=linewidth_solid,
+            label=r"$u_y$",
+        )
+        ax.set_xlabel(r"Time $t$ [s]")
+        ax.set_ylabel(r"Joy signal $u$ [-]")
+        ax.legend(loc="upper left")
+        plt.grid(True)
+        plt.box(True)
+        plt.tight_layout()
+        plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_joy_signal.pdf"))
+        plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_joy_signal.eps"))
+        plt.show()
 
 
 if __name__ == "__main__":
