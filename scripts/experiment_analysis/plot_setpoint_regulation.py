@@ -52,7 +52,7 @@ def main():
     print("Available time series data:\n", data_ts.keys())
     print("Available controller info", ci_ts.keys())
 
-    figsize = (4.5, 3.0)
+    figsize = (4.5, 2.6)
     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     linewidth_dashed = 2.7
     linewidth_dotted = 2.7
