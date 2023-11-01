@@ -38,7 +38,8 @@ elif EXPERIMENT_ID == "20231030_181558":
 elif EXPERIMENT_ID == "20231031_203004":
     # hairspray interaction with brain controller
     CONTROLLER_TYPE = "brain"  # "computational", "brain", or "keyboard"
-    DURATION = None
+    REL_START_TIME = 379.0
+    DURATION = 111.0
     TRAJECTORY_TYPE = "adl"  # trajectory type
 else:
     CONTROLLER_TYPE = "brain"
