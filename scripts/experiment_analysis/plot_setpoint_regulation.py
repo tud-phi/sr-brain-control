@@ -21,7 +21,7 @@ plt.rcParams.update(
     }
 )
 
-EXPERIMENT_ID = "20231030_181558"  # experiment id
+EXPERIMENT_ID = "20231031_185546"  # experiment id
 
 DURATION = 543.0  # duration of the experiment [s]
 if EXPERIMENT_ID == "20231031_185546":
@@ -63,7 +63,9 @@ def main():
     else:
         figsize = (4.5, 3.0)
     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-    linewidth_dotted = 2.25
+    linewidth_dashed = 2.7
+    linewidth_dotted = 2.7
+    linewidth_solid = 2.0
     dots = (1.2, 0.8)
     dashes = (2.5, 1.2)
 
@@ -77,7 +79,7 @@ def main():
         color=colors[0],
         linestyle="--",
         dashes=dashes,
-        linewidth=linewidth_dotted,
+        linewidth=linewidth_dashed,
         label=r"$x^\mathrm{d}$",
     )
     ax.step(
@@ -87,7 +89,7 @@ def main():
         color=colors[1],
         linestyle="--",
         dashes=dashes,
-        linewidth=linewidth_dotted,
+        linewidth=linewidth_dashed,
         label=r"$y^\mathrm{d}$",
     )
     if CONTROLLER_TYPE != "computational":
@@ -114,12 +116,14 @@ def main():
         ci_ts["ts"],
         ci_ts["chiee"][:, 0] * 1e3,
         color=colors[0],
+        linewidth=linewidth_solid,
         label=r"$x$",
     )
     ax.plot(
         ci_ts["ts"],
         ci_ts["chiee"][:, 1] * 1e3,
         color=colors[1],
+        linewidth=linewidth_solid,
         label=r"$y$",
     )
     plt.xlabel(r"$t$ [s]")
@@ -141,12 +145,14 @@ def main():
         ci_ts["ts"],
         ci_ts["phi_des_sat"][:, 0],
         color=colors[0],
+        linewidth=linewidth_solid,
         label=r"$\phi_1$",
     )
     ax.plot(
         ci_ts["ts"],
         ci_ts["phi_des_sat"][:, 1],
         color=colors[1],
+        linewidth=linewidth_solid,
         label=r"$\phi_2$",
     )
     plt.xlabel(r"$t$ [s]")
@@ -166,18 +172,21 @@ def main():
         ci_ts["ts"],
         ci_ts["q"][:, 0],
         color=colors[0],
+        linewidth=linewidth_solid,
         label=r"$\kappa_\mathrm{be}$",
     )
     ax2.plot(
         ci_ts["ts"],
         ci_ts["q"][:, 1],
         color=colors[1],
+        linewidth=linewidth_solid,
         label=r"$\sigma_\mathrm{sh}$",
     )
     ax2.plot(
         ci_ts["ts"],
         ci_ts["q"][:, 2],
         color=colors[2],
+        linewidth=linewidth_solid,
         label=r"$\sigma_\mathrm{ax}$",
     )
     ax1.set_xlabel(r"$t$ [s]")
