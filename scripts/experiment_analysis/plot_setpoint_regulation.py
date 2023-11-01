@@ -213,7 +213,7 @@ def main():
         )
         ax.plot(
             data_ts["ts_joy_signal"],
-            data_ts["joy_signal_ts"][:, 0],
+            data_ts["joy_signal_ts"][:, 1],
             color=colors[1],
             linewidth=linewidth_solid,
             label=r"$u_y$",
