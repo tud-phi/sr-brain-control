@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 
+from hsa_planar_control.analysis.utils import trim_time_series_data
+
 plt.rcParams.update(
     {
         "text.usetex": True,
@@ -19,9 +21,9 @@ plt.rcParams.update(
     }
 )
 
-EXPERIMENT_ID = "20231030_181558"  # experiment name
+EXPERIMENT_ID = "20231030_181558"  # experiment id
 
-DURATION = None
+DURATION = 543.0  # duration of the experiment [s]
 if EXPERIMENT_ID == "20231031_185546":
     # setpoint regulation with brain controller
     CONTROLLER_TYPE = "brain"  # "computational", "brain", or "keyboard"
@@ -46,22 +48,15 @@ def main():
         str(experiment_folder / ("rosbag2_" + EXPERIMENT_ID + "_0.dill")), "rb"
     ) as f:
         data_ts = dill.load(f)
+
+    # absolute start time of the experiment
+    start_time = data_ts["ts_chiee_des"][0]
+    # trim the dictionary with the time series data
+    data_ts = trim_time_series_data(data_ts, start_time, DURATION)
     ci_ts = data_ts["controller_info_ts"]
 
     print("Available time series data:\n", data_ts.keys())
     print("Available controller info", ci_ts.keys())
-
-    # absolute start time
-    start_time = ci_ts["ts"][0]
-    ts = ci_ts["ts"] - start_time
-    print("Experiment duration:", ts[-1])
-
-    # trim the time series data
-    if DURATION is not None:
-        end_time_idx = np.argmax(ts > DURATION)
-        ts = ts[:end_time_idx]
-        for key in ci_ts.keys():
-            ci_ts[key] = ci_ts[key][:end_time_idx]
 
     if three_panel_layout:
         figsize = (3.5, 4.0)
@@ -69,43 +64,70 @@ def main():
         figsize = (4.5, 3.0)
     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     linewidth_dotted = 2.25
-    dashes = (1.2, 0.8)
+    dots = (1.2, 0.8)
+    dashes = (2.5, 1.2)
 
     plt.figure(figsize=figsize, num="End-effector position")
     ax = plt.gca()
-    ax.plot(
-        ts,
-        ci_ts["chiee_des"][:, 0] * 1e3,
+    # plot the desired end-effector position
+    ax.step(
+        data_ts["ts_chiee_des"],
+        data_ts["chiee_des_ts"][:, 0] * 1e3,
+        where="post",
         color=colors[0],
-        linestyle=":",
-        linewidth=linewidth_dotted,
+        linestyle="--",
         dashes=dashes,
-        label=r"$p_\mathrm{x}^\mathrm{d}$",
+        linewidth=linewidth_dotted,
+        label=r"$x^\mathrm{d}$",
     )
-    ax.plot(
-        ts,
-        ci_ts["chiee_des"][:, 1] * 1e3,
+    ax.step(
+        data_ts["ts_chiee_des"],
+        data_ts["chiee_des_ts"][:, 1] * 1e3,
+        where="post",
         color=colors[1],
-        linestyle=":",
-        linewidth=linewidth_dotted,
+        linestyle="--",
         dashes=dashes,
-        label=r"$p_\mathrm{y}^\mathrm{d}$",
+        linewidth=linewidth_dotted,
+        label=r"$y^\mathrm{d}$",
     )
+    if CONTROLLER_TYPE != "computational":
+        # plot the attractor position
+        ax.plot(
+            ci_ts["ts"],
+            ci_ts["chiee_des"][:, 0] * 1e3,
+            color=colors[0],
+            linestyle=":",
+            linewidth=linewidth_dotted,
+            dashes=dots,
+            label=r"$x^\mathrm{at}$",
+        )
+        ax.plot(
+            ci_ts["ts"],
+            ci_ts["chiee_des"][:, 1] * 1e3,
+            color=colors[1],
+            linestyle=":",
+            linewidth=linewidth_dotted,
+            dashes=dots,
+            label=r"$y^\mathrm{at}$",
+        )
     ax.plot(
-        ts,
+        ci_ts["ts"],
         ci_ts["chiee"][:, 0] * 1e3,
         color=colors[0],
-        label=r"$p_\mathrm{x}$",
+        label=r"$x$",
     )
     ax.plot(
-        ts,
+        ci_ts["ts"],
         ci_ts["chiee"][:, 1] * 1e3,
         color=colors[1],
-        label=r"$p_\mathrm{y}$",
+        label=r"$y$",
     )
     plt.xlabel(r"$t$ [s]")
     plt.ylabel(r"End-effector position $p_\mathrm{ee}$ [mm]")
-    plt.legend()
+    if CONTROLLER_TYPE == "computational":
+        plt.legend(ncols=2)
+    else:
+        plt.legend(ncols=3)
     plt.grid(True)
     plt.box(True)
     plt.tight_layout()
@@ -116,13 +138,13 @@ def main():
     plt.figure(figsize=figsize, num="Control input")
     ax = plt.gca()
     ax.plot(
-        ts,
+        ci_ts["ts"],
         ci_ts["phi_des_sat"][:, 0],
         color=colors[0],
         label=r"$\phi_1$",
     )
     ax.plot(
-        ts,
+        ci_ts["ts"],
         ci_ts["phi_des_sat"][:, 1],
         color=colors[1],
         label=r"$\phi_2$",
@@ -141,46 +163,19 @@ def main():
     ax1 = plt.gca()
     ax2 = ax1.twinx()
     ax1.plot(
-        ts,
-        ci_ts["q_des"][:, 0],
-        color=colors[0],
-        linestyle=":",
-        linewidth=linewidth_dotted,
-        dashes=dashes,
-        label=r"$\kappa_\mathrm{be}^\mathrm{d}$",
-    )
-    ax1.plot(
-        ts,
+        ci_ts["ts"],
         ci_ts["q"][:, 0],
         color=colors[0],
         label=r"$\kappa_\mathrm{be}$",
     )
     ax2.plot(
-        ts,
-        ci_ts["q_des"][:, 1],
-        color=colors[1],
-        linestyle=":",
-        linewidth=linewidth_dotted,
-        dashes=dashes,
-        label=r"$\sigma_\mathrm{sh}^\mathrm{d}$",
-    )
-    ax2.plot(
-        ts,
-        ci_ts["q_des"][:, 2],
-        color=colors[2],
-        linestyle=":",
-        linewidth=linewidth_dotted,
-        dashes=dashes,
-        label=r"$\sigma_\mathrm{ax}^\mathrm{d}$",
-    )
-    ax2.plot(
-        ts,
+        ci_ts["ts"],
         ci_ts["q"][:, 1],
         color=colors[1],
         label=r"$\sigma_\mathrm{sh}$",
     )
     ax2.plot(
-        ts,
+        ci_ts["ts"],
         ci_ts["q"][:, 2],
         color=colors[2],
         label=r"$\sigma_\mathrm{ax}$",
