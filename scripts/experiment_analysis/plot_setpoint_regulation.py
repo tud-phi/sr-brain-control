@@ -36,12 +36,6 @@ elif EXPERIMENT_ID == "20231030_181558":
 else:
     CONTROLLER_TYPE = "brain"
 
-if CONTROLLER_TYPE == "computational":
-    three_panel_layout = True
-else:
-    three_panel_layout = False
-
-
 def main():
     experiment_folder = Path("data") / "experiments" / EXPERIMENT_ID
     with open(
@@ -58,10 +52,7 @@ def main():
     print("Available time series data:\n", data_ts.keys())
     print("Available controller info", ci_ts.keys())
 
-    if three_panel_layout:
-        figsize = (3.5, 4.0)
-    else:
-        figsize = (4.5, 3.0)
+    figsize = (4.5, 3.0)
     colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     linewidth_dashed = 2.7
     linewidth_dotted = 2.7
@@ -127,7 +118,7 @@ def main():
         label=r"$y$",
     )
     plt.xlabel(r"Time $t$ [s]")
-    plt.ylabel(r"End-effector position $p_\mathrm{ee}$ [mm]")
+    plt.ylabel(r"End-effector position $x$ [mm]")
     if CONTROLLER_TYPE == "computational":
         plt.legend(ncols=2)
     else:
@@ -137,6 +128,88 @@ def main():
     plt.tight_layout()
     plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_pee.pdf"))
     plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_pee.eps"))
+    plt.show()
+
+    plt.figure(figsize=figsize, num="End-effector position x-axis")
+    ax = plt.gca()
+    # plot the desired end-effector position
+    ax.step(
+        data_ts["ts_chiee_des"],
+        data_ts["chiee_des_ts"][:, 0] * 1e3,
+        where="post",
+        color=colors[0],
+        linestyle="--",
+        dashes=dashes,
+        linewidth=linewidth_dashed,
+        label=r"$x^\mathrm{d}$",
+    )
+    if CONTROLLER_TYPE != "computational":
+        # plot the attractor position
+        ax.plot(
+            ci_ts["ts"],
+            ci_ts["chiee_des"][:, 0] * 1e3,
+            color=colors[1],
+            linestyle=":",
+            linewidth=linewidth_dotted,
+            dashes=dots,
+            label=r"$x^\mathrm{at}$",
+        )
+    ax.plot(
+        ci_ts["ts"],
+        ci_ts["chiee"][:, 0] * 1e3,
+        color=colors[2],
+        linewidth=linewidth_solid,
+        label=r"$x$",
+    )
+    plt.xlabel(r"Time $t$ [s]")
+    plt.ylabel(r"End-effector x-coordinate $x_1$ [mm]")
+    plt.grid(True)
+    plt.box(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_pee_x.pdf"))
+    plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_pee_x.eps"))
+    plt.show()
+
+    plt.figure(figsize=figsize, num="End-effector position y-axis")
+    ax = plt.gca()
+    # plot the desired end-effector position
+    ax.step(
+        data_ts["ts_chiee_des"],
+        data_ts["chiee_des_ts"][:, 1] * 1e3,
+        where="post",
+        color=colors[0],
+        linestyle="--",
+        dashes=dashes,
+        linewidth=linewidth_dashed,
+        label=r"$x^\mathrm{d}$",
+    )
+    if CONTROLLER_TYPE != "computational":
+        # plot the attractor position
+        ax.plot(
+            ci_ts["ts"],
+            ci_ts["chiee_des"][:, 1] * 1e3,
+            color=colors[1],
+            linestyle=":",
+            linewidth=linewidth_dotted,
+            dashes=dots,
+            label=r"$x^\mathrm{at}$",
+        )
+    ax.plot(
+        ci_ts["ts"],
+        ci_ts["chiee"][:, 1] * 1e3,
+        color=colors[2],
+        linewidth=linewidth_solid,
+        label=r"$x$",
+    )
+    plt.xlabel(r"Time $t$ [s]")
+    plt.ylabel(r"End-effector y-coordinate $x_2$ [mm]")
+    plt.grid(True)
+    plt.box(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_pee_y.pdf"))
+    plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_pee_y.eps"))
     plt.show()
 
     plt.figure(figsize=figsize, num="Control input")
