@@ -21,7 +21,7 @@ plt.rcParams.update(
     }
 )
 
-EXPERIMENT_ID = "20231031_203004"  # experiment id
+EXPERIMENT_ID = "20231031_185546"  # experiment id
 
 TRAJECTORY_TYPE = "setpoint_regulation"  # trajectory type. Can be "setpoint_regulation" or "adl"
 REL_START_TIME = 0.0  # relative start time of the experiment [s]
@@ -318,6 +318,24 @@ def main():
         plt.tight_layout()
         plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_joy_signal.pdf"))
         plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_joy_signal.eps"))
+        plt.show()
+
+    if "actuation_optimality_error" in ci_ts.keys():
+        fig = plt.figure(figsize=figsize, num="Actuation optimality error")
+        ax = plt.gca()
+        ax.plot(
+            ci_ts["ts"],
+            ci_ts["actuation_optimality_error"],
+            color=colors[0],
+            linewidth=linewidth_solid
+        )
+        ax.set_xlabel(r"Time $t$ [s]")
+        ax.set_ylabel(r"Actuation optimality error")
+        plt.grid(True)
+        plt.box(True)
+        plt.tight_layout()
+        plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_actuation_optimality_error.pdf"))
+        plt.savefig(str(experiment_folder / f"{EXPERIMENT_ID}_actuation_optimality_error.eps"))
         plt.show()
 
 
