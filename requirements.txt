@@ -1,7 +1,9 @@
-dill
+dill  # for loading of pickled data
 jax
-hsa-planar-control
-jsrm
-matplotlib
-pycairo
-PyQt5
+jsrm  # jax-soft-robot-modelling
+matplotlib  # for plotting
+pycairo  # for plotting
+PyQt5  # for plotting
+
+# install hsa-planar-control
+git+git://github.com/tud-phi/hsa-planar-control.git
