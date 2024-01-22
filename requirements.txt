@@ -3,3 +3,5 @@ jax
 hsa-planar-control
 jsrm
 matplotlib
+pycairo
+PyQt5
