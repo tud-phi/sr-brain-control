@@ -1,10 +1,9 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%BoundingBox: 0 0 324 188
 %%HiResBoundingBox: 0.000000 0.000000 324.000000 187.200000
-%%Invocation: gs -dBATCH -dNOPAUSE -r6000 -sDEVICE=ps2write -dEPSCrop -sOutputFile=? ?
-%%Creator: GPL Ghostscript 9550 (ps2write)
+%%Creator: GPL Ghostscript 927 (ps2write)
 %%LanguageLevel: 2
-%%CreationDate: D:20231102005625+01'00'
+%%CreationDate: D:20240122112813+01'00'
 %%EndComments
 %%BeginProlog
 save
@@ -16,28 +15,16 @@ newpath
 %%EndProlog
 %%Page 1 1
 %%BeginProlog
-10 dict dup begin
 /DSC_OPDFREAD true def
 /SetPageSize true def
 /EPS2Write false def
-end
-count 0 ne{
-dup type/dicttype eq{
-dup/EPS2Write known{
-dup/EPS2Write get not
-}
-{
-true
-}ifelse
-}
-{
-true
-}ifelse
-}
-{
-true
+currentdict/DSC_OPDFREAD known{
+currentdict/DSC_OPDFREAD get
+}{
+false
 }ifelse
 10 dict begin
+/DSC_OPDFREAD exch def
 /this currentdict def
 /y 720 def
 /ebuf 200 string def
@@ -49,7 +36,6 @@ true
 36//this/y get moveto
 //this/y 2 copy get 12 sub put
 }bind def
-{
 errordict/handleerror
 {systemdict begin
 $error begin
@@ -101,24 +87,8 @@ quit
 end
 end
 }bind readonly put
-}if
 end
 50 dict begin
-count 0 ne{
-dup type/dicttype eq{
-{def}forall
-false
-}
-{
-true
-}ifelse
-}
-{
-true
-}ifelse
-{
-(   *** Warning: global definitions dictionary not found, file may be corrupted.\n)print flush
-}if
 /DefaultSwitch
 {
 dup where{
@@ -870,9 +840,9 @@ pop pop
 }if
 1 index exch/Context exch put
 dup/ImmediateExec true put
-/pagesave save def
 dup/IsPage true put
 SetPageSize{dup/Context get//SetupPageView exec}if
+/pagesave save def
 }bind def
 /FontFileDaemon
 {
@@ -3542,10 +3512,7 @@ grestore
 //GraphicState/FontMatrixNonHV currentfont/FontMatrix get 1 get 0 ne put
 }bind def
 /ShowText
-{
-//GraphicState/TextRenderingMode get dup 0 eq
-exch 3 eq not currentfont/FontType get 3 eq and or
-{
+{//GraphicState/TextRenderingMode get 0 eq{
 //GraphicState/WordSpacing get 0
 32
 //GraphicState/CharacterSpacing get 0
@@ -3600,26 +3567,12 @@ exch cshow
 }ifelse
 }bind def
 /ShowTextBeg
-{
-//GraphicState/TextRenderingMode get dup 0 ne
-{
-3 ne
-currentfont/FontType get 3 eq not and{
+{//GraphicState/TextRenderingMode get 0 ne{
 currentpoint newpath moveto
 }if
-}
-{
-pop
-}ifelse
 }bind def
 /ShowTextEnd
-{
-//GraphicState/TextRenderingMode get
-currentfont/FontType get 3 eq{
-dup 3 ne{
-pop 0
-}if
-}if
+{//GraphicState/TextRenderingMode get
 {dup 1 eq{
 stroke exit
 }if
@@ -8808,17 +8761,27 @@ endobj
 endobj
 %%EndPageSetup
 5 0 obj
-<</Length 6621>>stream
+<</Length 7234>>stream
 q 0.012 0 0 0.012 0 0 cm
 q
 0 15530 27000 -15530 re
 W n
 1 G
 1 g
-0 -70 27000 15600 re
+q 1.65644 0 0 1.65644 0 0 cm
+0 -42.2593 m
+16300 -42.2593 l
+16300 9375.52 l
+0 9375.52 l
 f
-4353.45 3314.86 21746.5 11315.1 re
+Q
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 2070.2 m
+16300 2070.2 l
+16300 9136.74 l
+2718.82 9136.74 l
 f
+Q
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
@@ -8922,64 +8885,73 @@ S
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-66.6667 w
+55.342 w
 2 J
 1 j
 0.689453 g
 0.689453 G
-19635.5 3314.86 m
-19635.5 14630 l
-S
+q 1.20463 0 0 1.20463 0 0 cm
+16300 2751.76 m
+16300 12144.8 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
 W n
 0 G
 0 g
-19635.5 3314.86 m
-19635.5 3023.19 l
+q 1.20463 0 0 1.20463 0 0 cm
+16300 2751.76 m
+16300 2509.64 l
 f
-66.6667 w
+Q
+55.3419 w
 1 j
-19635.5 3314.86 m
-19635.5 3023.19 l
-S
+q 1.20463 0 0 1.20463 0 0 cm
+16300 2751.76 m
+16300 2509.64 l
+S Q
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-66.6667 w
+46.8062 w
 2 J
 1 j
 0.689453 g
 0.689453 G
-23216.3 3314.86 m
-23216.3 14630 l
-S
+q 1.42431 0 0 1.42431 0 0 cm
+16300 2327.34 m
+16300 10271.6 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
 W n
 0 G
 0 g
-23216.3 3314.86 m
-23216.3 3023.19 l
+q 1.42431 0 0 1.42431 0 0 cm
+16300 2327.34 m
+16300 2122.57 l
 f
-66.6667 w
+Q
+46.8063 w
 1 j
-23216.3 3314.86 m
-23216.3 3023.19 l
-S
+q 1.42431 0 0 1.42431 0 0 cm
+16300 2327.34 m
+16300 2122.57 l
+S Q
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-66.6667 w
+41.6347 w
 2 J
 1 j
 0.689453 g
 0.689453 G
-4353.45 3829.18 m
-26100 3829.18 l
-S
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 2391.41 m
+16300 2391.41 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
@@ -8997,14 +8969,15 @@ S
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-66.6667 w
+41.6347 w
 2 J
 1 j
 0.689453 g
 0.689453 G
-4353.45 6400.81 m
-26100 6400.81 l
-S
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 3997.44 m
+16300 3997.44 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
@@ -9022,14 +8995,15 @@ S
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-66.6667 w
+41.6347 w
 2 J
 1 j
 0.689453 g
 0.689453 G
-4353.45 8972.43 m
-26100 8972.43 l
-S
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 5603.47 m
+16300 5603.47 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
@@ -9047,14 +9021,15 @@ S
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-66.6667 w
+41.6347 w
 2 J
 1 j
 0.689453 g
 0.689453 G
-4353.45 11544.1 m
-26100 11544.1 l
-S
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 7209.51 m
+16300 7209.51 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
@@ -9072,14 +9047,15 @@ S
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-66.6667 w
+41.6347 w
 2 J
 1 j
 0.689453 g
 0.689453 G
-4353.45 14115.7 m
-26100 14115.7 l
-S
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 8815.54 m
+16300 8815.54 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
@@ -9097,70 +9073,72 @@ S
 Q
 q
 4353.42 3314.83 21746.6 11315.2 re W n
-166.667 w
+108.184 w
 2 J
 1 j
 0.12207 0.467041 0.705078 rg
 0.12207 0.467041 0.705078 RG
-5341.93 3829.18 m
-6588.01 3829.18 l
-6593.44 14115.7 l
-6756.31 14115.7 l
-6758.11 3829.18 l
-6810.02 3829.18 l
-6815.43 14115.7 l
-7125.15 14115.7 l
-7126.97 3829.18 l
-8038.25 3829.18 l
-8041.83 14115.7 l
-8326.5 14115.7 l
-8333.67 3829.18 l
-8978.2 3829.18 l
-8992.56 14115.7 l
-8994.34 3829.18 l
-9046.23 3829.18 l
-9051.63 14115.7 l
-9483.11 14115.7 l
-9490.27 3829.18 l
-10356.9 3829.18 l
-10367.6 14115.7 l
-10512.6 14115.7 l
-10516.2 3829.18 l
-10842 3829.18 l
-10847.4 8972.43 l
-15595.5 8972.43 l
-15597.4 3829.18 l
-15740.5 3829.18 l
-15742.3 14115.7 l
-16551.6 14115.7 l
-16603.5 8972.43 l
-25111.5 8972.43 l
-25111.5 8972.43 l
-S
+q 1.54058 0 0 1.54058 0 0 cm
+3467.47 2485.54 m
+4276.31 2485.54 l
+4279.83 9162.55 l
+4385.55 9162.55 l
+4386.72 2485.54 l
+4420.41 2485.54 l
+4423.93 9162.55 l
+4624.97 9162.55 l
+4626.15 2485.54 l
+5217.66 2485.54 l
+5219.99 9162.55 l
+5404.77 9162.55 l
+5409.42 2485.54 l
+5827.79 2485.54 l
+5837.11 9162.55 l
+5838.27 2485.54 l
+5871.95 2485.54 l
+5875.46 9162.55 l
+6155.53 9162.55 l
+6160.17 2485.54 l
+6722.68 2485.54 l
+6729.63 9162.55 l
+6823.79 9162.55 l
+6826.08 2485.54 l
+7037.6 2485.54 l
+7041.1 5824.04 l
+10123.1 5824.04 l
+10124.4 2485.54 l
+10217.2 2485.54 l
+10218.4 9162.55 l
+10743.7 9162.55 l
+10777.4 5824.04 l
+16300 5824.04 l
+16300 5824.04 l
+S Q
 1 0.498047 0.0549927 rg
 1 0.498047 0.0549927 RG
-5341.93 8972.43 m
-11203.7 8972.43 l
-11244.9 3829.18 l
-11357.7 3829.18 l
-11368.4 14115.7 l
-11878.7 14115.7 l
-11884.1 3829.18 l
-14089.8 3829.18 l
-14091.6 14115.7 l
-15131.8 14115.7 l
-15139 8972.43 l
-17020.7 8972.43 l
-17024.3 3829.18 l
-17106.6 3829.18 l
-17112 14115.7 l
-17522 14115.7 l
-17556 3829.18 l
-21348.1 3829.18 l
-21358.8 14115.7 l
-25111.5 14115.7 l
-25111.5 14115.7 l
-S
+q 1.54058 0 0 1.54058 0 0 cm
+3467.47 5824.04 m
+7272.35 5824.04 l
+7299.09 2485.54 l
+7372.3 2485.54 l
+7379.27 9162.55 l
+7710.51 9162.55 l
+7714 2485.54 l
+9145.75 2485.54 l
+9146.91 9162.55 l
+9822.13 9162.55 l
+9826.8 5824.04 l
+11048.2 5824.04 l
+11050.6 2485.54 l
+11104 2485.54 l
+11107.5 9162.55 l
+11373.6 9162.55 l
+11395.7 2485.54 l
+13857.2 2485.54 l
+13864.1 9162.55 l
+16300 9162.55 l
+16300 9162.55 l
+S Q
 Q
 q
 0 15530 27000 -15530 re
@@ -9172,15 +9150,19 @@ W n
 4353.45 3314.86 m
 4353.45 14630 l
 S
-26100 3314.86 m
-26100 14630 l
-S
-4353.45 3314.86 m
-26100 3314.86 l
-S
-4353.45 14630 m
-26100 14630 l
-S
+41.6347 w
+q 1.60123 0 0 1.60123 0 0 cm
+16300 2070.2 m
+16300 9136.74 l
+S Q
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 2070.2 m
+16300 2070.2 l
+S Q
+q 1.60123 0 0 1.60123 0 0 cm
+2718.82 9136.74 m
+16300 9136.74 l
+S Q
 1 G
 1 g
 4936.79 11564.4 m
@@ -9308,7 +9290,7 @@ q
 /R7 9.96264 Tf
 2.76 0 Td
 [(0)-5.88988]TJ
-0 1 -1 0 15.872 72.896 Tm
+0 1 -1 0 18.363 75.386 Tm
 [(J)-4.93504(o)18.1998(y)-316.15(s)-3.48529(ig)-5.88958(n)0.930429(a)-5.88958(l)]TJ
 /R9 9.96264 Tf
 46.68 0 Td
@@ -9334,7 +9316,6 @@ Q
 
 endstream
 endobj
-%%PageTrailer
 %%Trailer
 end
 cleartomark
