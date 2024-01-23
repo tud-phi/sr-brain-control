@@ -26,7 +26,9 @@ plt.rcParams.update(
 
 EXPERIMENT_ID = "20231031_185546"  # experiment id
 
-TRAJECTORY_TYPE = "setpoint_regulation"  # trajectory type. Can be "setpoint_regulation" or "adl"
+TRAJECTORY_TYPE = (
+    "setpoint_regulation"  # trajectory type. Can be "setpoint_regulation" or "adl"
+)
 SPEEDUP = 16  # speedup factor for the animation
 STEP_SKIP = 28  # step skip for the animation
 REL_START_TIME = 0.0  # relative start time of the experiment [s]
@@ -93,8 +95,8 @@ def main():
         pee_des_lines = []
         if "ts_chiee_des" in data_ts.keys() and "chiee_des_ts" in data_ts.keys():
             (line,) = ax.step(
-               [],
-               [],
+                [],
+                [],
                 where="post",
                 color=colors[0],
                 linestyle="--",
@@ -157,14 +159,18 @@ def main():
         ax.set_xlabel(r"Time $t$ [s]")
         plt.ylabel(r"End-effector position [mm]")
         ax.set_xlim(t_ts[0], t_ts[-1])
-        ax.set_ylim(
-            jnp.min(ci_ts["chiee"][..., :2]) - 5,
-            jnp.max(ci_ts["chiee"][..., :2]) + 10,
-        )
         ax.legend()
         ax.grid(True)
         plt.box(True)
         plt.tight_layout()
+
+        ymin = jnp.min(jnp.concatenate([ci_ts["chiee"][..., :2], ci_ts["chiee_des"][..., :2]], axis=0))
+        ymax = jnp.max(jnp.concatenate([ci_ts["chiee"][..., :2], ci_ts["chiee_des"][..., :2]], axis=0))
+        ax.set_ylim(
+            ymin * 1e3 - 5,
+            ymax * 1e3 + 5,
+        )
+
 
         def animate(time_idx):
             for _i, _line in enumerate(pee_lines):
@@ -185,8 +191,20 @@ def main():
                 # currently active reference
                 chiee_des_current = data_ts["chiee_des_ts"][chiee_des_selector][-1]
                 # add the currently active reference
-                ts_chiee_des = jnp.concatenate([data_ts["ts_chiee_des"][chiee_des_selector], jnp.expand_dims(t_ts[time_idx], axis=0)], axis=0)
-                chiee_des_ts = jnp.concatenate([data_ts["chiee_des_ts"][chiee_des_selector], jnp.expand_dims(chiee_des_current, axis=0)], axis=0)
+                ts_chiee_des = jnp.concatenate(
+                    [
+                        data_ts["ts_chiee_des"][chiee_des_selector],
+                        jnp.expand_dims(t_ts[time_idx], axis=0),
+                    ],
+                    axis=0,
+                )
+                chiee_des_ts = jnp.concatenate(
+                    [
+                        data_ts["chiee_des_ts"][chiee_des_selector],
+                        jnp.expand_dims(chiee_des_current, axis=0),
+                    ],
+                    axis=0,
+                )
                 for _i, _line in enumerate(pee_des_lines):
                     _line.set_data(
                         ts_chiee_des,
@@ -207,10 +225,7 @@ def main():
 
         movie_writer = animation.FFMpegWriter(fps=frame_rate)
         ani.save(
-            str(
-                experiment_folder
-                / f"{EXPERIMENT_ID}_pee_{SPEEDUP:.0f}x.mp4"
-            ),
+            str(experiment_folder / f"{EXPERIMENT_ID}_pee_{SPEEDUP:.0f}x.mp4"),
             writer=movie_writer,
         )
 
@@ -235,7 +250,7 @@ def main():
         ax.set_xlim(t_ts[0], t_ts[-1])
         ax.set_ylim(
             jnp.min(ci_ts["phi_des_sat"]) - jnp.pi / 16,
-            jnp.max( ci_ts["phi_des_sat"]) + jnp.pi / 16,
+            jnp.max(ci_ts["phi_des_sat"]) + jnp.pi / 16,
         )
         ax.legend()
         ax.grid(True)
@@ -263,10 +278,7 @@ def main():
 
         movie_writer = animation.FFMpegWriter(fps=frame_rate)
         ani.save(
-            str(
-                experiment_folder
-                / f"{EXPERIMENT_ID}_phi_{SPEEDUP:.0f}x.mp4"
-            ),
+            str(experiment_folder / f"{EXPERIMENT_ID}_phi_{SPEEDUP:.0f}x.mp4"),
             writer=movie_writer,
         )
 
@@ -283,5 +295,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
