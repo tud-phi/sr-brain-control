@@ -27,10 +27,9 @@ plt.rcParams.update(
 EXPERIMENT_ID = "20231031_185546"  # experiment id
 
 TRAJECTORY_TYPE = "setpoint_regulation"  # trajectory type. Can be "setpoint_regulation" or "adl"
-SPEEDUP = 8  # speedup factor for the animation
-STEP_SKIP = 12  # step skip for the animation
+SPEEDUP = 16  # speedup factor for the animation
+STEP_SKIP = 28  # step skip for the animation
 REL_START_TIME = 0.0  # relative start time of the experiment [s]
-DURATION = None
 PLOT_TYPE = "end_effector_position"  # plot type. Can be "control_input" or "end_effector_position"
 if EXPERIMENT_ID == "20231031_185546":
     # setpoint regulation with brain controller
@@ -53,8 +52,7 @@ else:
 if TRAJECTORY_TYPE == "setpoint_regulation":
     DURATION = 543.0  # duration of the experiment [s]
 
-
-figsize = (5.0, 3.0)
+figsize = (5.0, 2.5)
 colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 linewidth_dashed = 2.7
 linewidth_dotted = 2.7
@@ -174,16 +172,26 @@ def main():
                     ci_ts["ts"][:time_idx],
                     ci_ts["chiee"][:time_idx, _i],
                 )
-            for _i, _line in enumerate(pee_des_lines):
-                _line.set_data(
-                    data_ts["ts_chiee_des"][:time_idx],
-                    data_ts["chiee_des_ts"][:time_idx, _i],
-                )
             for _i, _line in enumerate(pee_at_lines):
                 _line.set_data(
                     ci_ts["ts"][:time_idx],
                     ci_ts["chiee_des"][:time_idx, _i],
                 )
+
+            # plot the reference trajectory
+            # define the time selector
+            chiee_des_selector = data_ts["ts_chiee_des"][:time_idx] <= t_ts[time_idx]
+            if jnp.sum(chiee_des_selector) > 0:
+                # currently active reference
+                chiee_des_current = data_ts["chiee_des_ts"][chiee_des_selector][-1]
+                # add the currently active reference
+                ts_chiee_des = jnp.concatenate([data_ts["ts_chiee_des"][chiee_des_selector], jnp.expand_dims(t_ts[time_idx], axis=0)], axis=0)
+                chiee_des_ts = jnp.concatenate([data_ts["chiee_des_ts"][chiee_des_selector], jnp.expand_dims(chiee_des_current, axis=0)], axis=0)
+                for _i, _line in enumerate(pee_des_lines):
+                    _line.set_data(
+                        ts_chiee_des,
+                        chiee_des_ts[..., _i],
+                    )
 
             lines = pee_lines + pee_des_lines + pee_at_lines
             pbar.update(STEP_SKIP)
