@@ -158,8 +158,8 @@ def main():
         plt.ylabel(r"End-effector position [mm]")
         ax.set_xlim(t_ts[0], t_ts[-1])
         ax.set_ylim(
-            jnp.min(ci_ts["chiee"][..., :2]) - jnp.pi / 16,
-            jnp.max(ci_ts["chiee"][..., :2]) + jnp.pi / 16,
+            jnp.min(ci_ts["chiee"][..., :2]) - 5,
+            jnp.max(ci_ts["chiee"][..., :2]) + 10,
         )
         ax.legend()
         ax.grid(True)
@@ -170,12 +170,12 @@ def main():
             for _i, _line in enumerate(pee_lines):
                 _line.set_data(
                     ci_ts["ts"][:time_idx],
-                    ci_ts["chiee"][:time_idx, _i],
+                    ci_ts["chiee"][:time_idx, _i] * 1e3,
                 )
             for _i, _line in enumerate(pee_at_lines):
                 _line.set_data(
                     ci_ts["ts"][:time_idx],
-                    ci_ts["chiee_des"][:time_idx, _i],
+                    ci_ts["chiee_des"][:time_idx, _i] * 1e3,
                 )
 
             # plot the reference trajectory
@@ -190,7 +190,7 @@ def main():
                 for _i, _line in enumerate(pee_des_lines):
                     _line.set_data(
                         ts_chiee_des,
-                        chiee_des_ts[..., _i],
+                        chiee_des_ts[..., _i] * 1e3,
                     )
 
             lines = pee_lines + pee_des_lines + pee_at_lines
@@ -209,7 +209,7 @@ def main():
         ani.save(
             str(
                 experiment_folder
-                / f"{EXPERIMENT_ID}_end_effector_position_{SPEEDUP:.0f}x.mp4"
+                / f"{EXPERIMENT_ID}_pee_{SPEEDUP:.0f}x.mp4"
             ),
             writer=movie_writer,
         )
@@ -265,7 +265,7 @@ def main():
         ani.save(
             str(
                 experiment_folder
-                / f"{EXPERIMENT_ID}_control_input_{SPEEDUP:.0f}x.mp4"
+                / f"{EXPERIMENT_ID}_phi_{SPEEDUP:.0f}x.mp4"
             ),
             writer=movie_writer,
         )
