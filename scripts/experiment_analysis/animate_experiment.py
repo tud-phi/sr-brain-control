@@ -89,7 +89,7 @@ def main():
     pbar = tqdm(total=t_ts.shape[0])
 
     def animate_end_effector_position():
-        fig = plt.figure(figsize=(5, 3.0), num="End-effector position", dpi=200)
+        fig = plt.figure(figsize=figsize, num="End-effector position", dpi=200)
         ax = plt.gca()
         # plot the desired end-effector position
         pee_des_lines = []
