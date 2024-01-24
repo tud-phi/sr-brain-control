@@ -49,4 +49,4 @@ You might also be interested in the following repositories:
 model is suitable for representing the shape of HSA rods.
  - The [`HSA-PyElastica`](https://github.com/tud-phi/HSA-PyElastica) repository contains a plugin for PyElastica
 for the simulation of HSA robots.
-- The ['scripts'](https://github.com/tud-phi/sr-brain-control/tree/main/scripts) contains .xml files for OpenVibe used for training and real time implementation of Algorithms for EEG and along with code for the tcp connection, experimental analysis.
+- The [scripts](https://github.com/tud-phi/sr-brain-control/tree/main/scripts) contains .xml files for OpenVibe used for training and real time implementation of Algorithms for EEG and along with code for the tcp connection, experimental analysis.
