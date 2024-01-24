@@ -1,8 +1,12 @@
 # Guiding Soft Robots with Motor-Imagery Brain Signals and Impedance Control
 
-This repository contains the code for plotting the experimental data of the paper **Guiding Soft Robots with Motor-Imagery Brain Signals and Impedance Control**.
+This repository contains the code for plotting the experimental data of the paper **Guiding Soft Robots with Motor-Imagery Brain Signals and Impedance Control**. Furthermore, it contains the OpenVibe `.xml` files used for data processing of the EEG signals, training the classifiers, and inference of the EEG pipeline online.
+
+[![Guiding Soft Robots with Motor-Imagery Brain Signals and Impedance Control - Video](https://img.youtube.com/vi/wZTOxBPZmPc/0.jpg)](https://www.youtube.com/watch?v=wZTOxBPZmPc)
 
 **Abstract:** Integrating Brain-Machine Interfaces into non-clinical applications like robot motion control remains difficult - despite remarkable advancements in clinical settings. Specifically, EEG-based motor imagery systems are still error-prone, posing safety risks when rigid robots operate near humans. This work presents an alternative pathway towards safe and effective operation by combining wearable EEG with physically embodied safety in soft robots. We introduce and test a pipeline that allows a user to move a soft robot's end effector in real time via brain waves that are measured by as few as three EEG channels. A robust motor imagery algorithm interprets the user's intentions to move the position of a virtual attractor to which the end effector is attracted, thanks to a new Cartesian impedance controller. We specifically focus here on planar soft robot-based architected metamaterials, which require the development of a novel control architecture to deal with the peculiar nonlinearities - e.g., non-affinity in control. We preliminarily but quantitatively evaluate the approach on the task of setpoint regulation. We observe that the user reaches the proximity of the setpoint in 66\% of steps and that for successful steps, the average response time is 21.5s. We also demonstrate the execution of simple real-world tasks involving interaction with the environment, which would be extremely hard to perform if it were not for the robot's softness.
+
+![Video of activity of daily living controlled with motor imagery](assets/20231031_203004_backview_4x.gif)
 
 ## Citation
 
