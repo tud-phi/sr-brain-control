@@ -186,30 +186,31 @@ def main():
 
             # plot the reference trajectory
             # define the time selector
-            chiee_des_selector = data_ts["ts_chiee_des"][:time_idx] <= t_ts[time_idx]
-            if jnp.sum(chiee_des_selector) > 0:
-                # currently active reference
-                chiee_des_current = data_ts["chiee_des_ts"][chiee_des_selector][-1]
-                # add the currently active reference
-                ts_chiee_des = jnp.concatenate(
-                    [
-                        data_ts["ts_chiee_des"][chiee_des_selector],
-                        jnp.expand_dims(t_ts[time_idx], axis=0),
-                    ],
-                    axis=0,
-                )
-                chiee_des_ts = jnp.concatenate(
-                    [
-                        data_ts["chiee_des_ts"][chiee_des_selector],
-                        jnp.expand_dims(chiee_des_current, axis=0),
-                    ],
-                    axis=0,
-                )
-                for _i, _line in enumerate(pee_des_lines):
-                    _line.set_data(
-                        ts_chiee_des,
-                        chiee_des_ts[..., _i] * 1e3,
+            if "ts_chiee_des" in data_ts.keys() and "chiee_des_ts" in data_ts.keys():
+                chiee_des_selector = data_ts["ts_chiee_des"][:time_idx] <= t_ts[time_idx]
+                if jnp.sum(chiee_des_selector) > 0:
+                    # currently active reference
+                    chiee_des_current = data_ts["chiee_des_ts"][chiee_des_selector][-1]
+                    # add the currently active reference
+                    ts_chiee_des = jnp.concatenate(
+                        [
+                            data_ts["ts_chiee_des"][chiee_des_selector],
+                            jnp.expand_dims(t_ts[time_idx], axis=0),
+                        ],
+                        axis=0,
                     )
+                    chiee_des_ts = jnp.concatenate(
+                        [
+                            data_ts["chiee_des_ts"][chiee_des_selector],
+                            jnp.expand_dims(chiee_des_current, axis=0),
+                        ],
+                        axis=0,
+                    )
+                    for _i, _line in enumerate(pee_des_lines):
+                        _line.set_data(
+                            ts_chiee_des,
+                            chiee_des_ts[..., _i] * 1e3,
+                        )
 
             lines = pee_lines + pee_des_lines + pee_at_lines
             pbar.update(STEP_SKIP)
