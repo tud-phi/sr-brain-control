@@ -25,6 +25,7 @@ plt.rcParams.update(
 
 
 EXPERIMENT_ID = "20231031_185546"  # experiment id
+PLOT_TYPE = "end_effector_position"  # plot type. Can be "end_effector_position" or "control_input"
 
 TRAJECTORY_TYPE = (
     "setpoint_regulation"  # trajectory type. Can be "setpoint_regulation" or "adl"
@@ -32,7 +33,6 @@ TRAJECTORY_TYPE = (
 SPEEDUP = 30  # speedup factor for the animation
 STEP_SKIP = 60  # step skip for the animation
 REL_START_TIME = 0.0  # relative start time of the experiment [s]
-PLOT_TYPE = "end_effector_position"  # plot type. Can be "end_effector_position" or "control_input"
 if EXPERIMENT_ID == "20231031_185546":
     # setpoint regulation with brain controller
     CONTROLLER_TYPE = "brain"  # "computational", "brain", or "keyboard"
