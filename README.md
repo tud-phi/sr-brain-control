@@ -11,7 +11,7 @@ This repository contains the code for plotting the experimental data of the pape
 ## Citation
 
 This repository is part of the publication **Guiding Soft Robots with Motor-Imagery Brain Signals and Impedance Control** which received the Best Paper Award (1st place) at the 
-_7th IEEE-RAS International Conference on Soft Robotics (RoboSoft 2024)_.
+_7th IEEE-RAS International Conference on Soft Robotics (RoboSoft 2024)_. The paper is available online on [IEEEXplore](10.1109/RoboSoft60065.2024.10522005) or on [arXiv](https://arxiv.org/abs/2401.13441).
 
 Please use the following citation if you use our method in your (scientific) work:
 
@@ -20,6 +20,7 @@ Please use the following citation if you use our method in your (scientific) wor
   title={Guiding Soft Robots with Motor-Imagery Brain Signals and Impedance Control},
   author={St{\"o}lzle, Maximilian and Baberwal, Sonal Santosh and Rus, Daniela and Coyle, Shirley and Della Santina, Cosimo},
   booktitle={2024 IEEE 7th International Conference on Soft Robotics (RoboSoft)},
+  pages={276--283},
   year={2024},
   organization={IEEE}
 }
